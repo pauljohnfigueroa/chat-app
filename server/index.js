@@ -1,14 +1,12 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
+import cors from 'cors'
 
 dotenv.config()
 const app = express()
 
-/* Models */
-// import User from './models/User.js'
-// import ChatRoom from './models/ChatRoom.js'
-// import Message from './models/Message.js'
+import corsOptions from './config/corsOptions.js'
 
 /* Routes */
 import userRoutes from './routes/users.js'
@@ -17,6 +15,10 @@ import chatroomRoutes from './routes/chatroom.js'
 /* Middleware */
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+// Cross Origin Resource Sharing
+// you must have a whitelist of allowed domains, see config/corsOptions
+app.use(cors(corsOptions))
 
 /* Routes */
 app.use('/users', userRoutes)

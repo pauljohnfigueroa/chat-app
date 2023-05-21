@@ -12,6 +12,7 @@ const app = express()
 
 /* Routes */
 import userRoutes from './routes/users.js'
+import chatroomRoutes from './routes/chatroom.js'
 
 /* Middleware */
 app.use(express.json())
@@ -19,17 +20,23 @@ app.use(express.urlencoded({ extended: true }))
 
 /* Routes */
 app.use('/users', userRoutes)
+app.use('/chatroom', chatroomRoutes)
 
 // Error handlers
-// import errorHandlers from './handlers/errorHandlers'
-// app.use(errorHandlers.notFound)
-// app.use(errorHandlers.mongooseErrors)
+import {
+  notFound,
+  mongooseErrors,
+  developmentErrors,
+  productionErrors
+} from './handlers/errorHandlers.js'
+app.use(notFound)
+app.use(mongooseErrors)
 
-// if (process.env.ENV === 'dev') {
-//   app.use(errorHandlers.developmentErrors)
-// } else {
-//   app.use(errorHandlers.productionErrors)
-// }
+if (process.env.ENV === 'dev') {
+  app.use(developmentErrors)
+} else {
+  app.use(productionErrors)
+}
 
 const PORT = process.env.PORT || 8001
 

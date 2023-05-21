@@ -21,7 +21,7 @@ export const catchErrors = fn => {
     MongoDB Validation Error Handler
   */
 
-export const mongoseErrors = (err, req, res, next) => {
+export const mongooseErrors = (err, req, res, next) => {
   if (!err.errors) return next(err)
   const errorKeys = Object.keys(err.errors)
   let message = ''

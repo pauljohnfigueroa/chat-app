@@ -40,7 +40,7 @@ export const register = async (req, res) => {
     const emailExists = await User.findOne({ email })
     if (emailExists) {
       res.status(500).json({ message: `User already exists.` })
-      throw 'Error: User already exists.'
+      return
     }
 
     // password salt

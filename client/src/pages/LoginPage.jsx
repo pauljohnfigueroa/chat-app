@@ -1,10 +1,12 @@
 import { useRef } from 'react'
 import axios from 'axios'
 import makeToast from '../Toaster'
+import { useNavigate } from 'react-router-dom'
 
-const LoginPage = props => {
+const LoginPage = () => {
   const emailRef = useRef()
   const passwordRef = useRef()
+  const navigate = useNavigate()
 
   const loginUser = () => {
     const email = emailRef.current.value
@@ -18,6 +20,10 @@ const LoginPage = props => {
       .then(response => {
         //console.log(response.data)
         makeToast('success', response.data.message)
+        // save to localStorage
+        localStorage.setItem('chatapp_token', response.data.token)
+        // redirect to dashboard
+        navigate('/dashboard')
       })
       .catch(error => {
         makeToast('error', error.response.data.message)
@@ -26,7 +32,7 @@ const LoginPage = props => {
 
   return (
     <div className="card">
-      <div className="cardHeader">Welcome to Chat App</div>
+      <div className="cardHeader">ChatApp Login</div>
       <div className="cardBody">
         <div className="inputGroup">
           <label htmlFor="email">Email</label>

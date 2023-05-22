@@ -3,7 +3,7 @@ import axios from 'axios'
 import makeToast from '../Toaster'
 import { useNavigate } from 'react-router-dom'
 
-const LoginPage = () => {
+const LoginPage = ({ setupSocket }) => {
   const emailRef = useRef()
   const passwordRef = useRef()
   const navigate = useNavigate()
@@ -22,6 +22,7 @@ const LoginPage = () => {
         makeToast('success', response.data.message)
         // save to localStorage
         localStorage.setItem('chatapp_token', response.data.token)
+        setupSocket()
         // redirect to dashboard
         navigate('/dashboard')
       })

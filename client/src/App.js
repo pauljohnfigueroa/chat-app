@@ -1,18 +1,60 @@
+import { useEffect, useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import IndexPage from './pages/IndexPage'
-import LoginPage from './pages/LoginPage'
-import RegisterPage from './pages/RegisterPage'
-import DashboardPage from './pages/DashboardPage'
+import Home from './pages/Home'
+import Login from './pages/Login'
+import Register from './pages/Register'
+import Dashboard from './pages/Dashboard'
+import ChatRoom from './pages/ChatRoom'
+import { io } from 'socket.io-client'
+import makeToast from './Toaster'
 
 function App() {
+  const [socket, setSocket] = useState(null)
+
+  const setupSocket = () => {
+    const token = localStorage.getItem('chatapp_token')
+    if (token && !socket) {
+      const newSocket = io('http://localhost:8000', {
+        query: {
+          token: localStorage.getItem('chatapp_token')
+        },
+        cors: {
+          origin: 'http://localhost:3000',
+          methods: ['GET', 'POST']
+        }
+      })
+
+      newSocket.on('disconnect', () => {
+        setSocket(null)
+        setTimeout(setupSocket, 3000)
+        //console.log('Socket disconnected!')
+        makeToast('error', 'Socket disconnected!')
+      })
+
+      newSocket.on('connect', () => {
+        //console.log('Socket connected!')
+        makeToast('success', 'Socket connected!')
+      })
+
+      setSocket(newSocket)
+    }
+  }
+
+  useEffect(() => {
+    setupSocket()
+
+    // eslint-disable-next-line
+  }, [])
+
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<IndexPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login setupSocket={setupSocket} />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/dashboard" element={<Dashboard socket={socket} />} />
+          <Route path="/chatrooms/:chatRoomId" element={<ChatRoom socket={socket} />} />
         </Routes>
       </BrowserRouter>
     </div>

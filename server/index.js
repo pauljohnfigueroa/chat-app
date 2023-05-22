@@ -16,6 +16,7 @@ import corsOptions from './config/corsOptions.js'
 /* Routes */
 import userRoutes from './routes/users.js'
 import chatroomRoutes from './routes/chatroom.js'
+import messageRoutes from './routes/messages.js'
 
 /* Middleware */
 app.use(express.json())
@@ -28,6 +29,7 @@ app.use(cors(corsOptions))
 /* Routes */
 app.use('/users', userRoutes)
 app.use('/chatrooms', chatroomRoutes)
+app.use('/messages', messageRoutes)
 
 // Error handlers
 import {

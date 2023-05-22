@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import axios from 'axios'
+import makeToast from '../Toaster'
 
 const ChatRoom = ({ socket }) => {
   const { chatRoomId } = useParams() // chatroom id
+
   const [messages, setMessages] = useState([])
   const [userId, setUserId] = useState('')
   const messageRef = useRef()
@@ -30,7 +33,7 @@ const ChatRoom = ({ socket }) => {
       const payload = JSON.parse(window.atob(token.split('.')[1]))
       setUserId(payload.id)
     }
-
+    // new messages
     if (socket) {
       socket.on('newMessage', message => {
         const newMessages = [...messages, message]
@@ -41,6 +44,22 @@ const ChatRoom = ({ socket }) => {
   }, [messages])
 
   useEffect(() => {
+    // message history
+    axios
+      .get(`http://localhost:8000/messages/${chatRoomId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
+        }
+      })
+      .then(response => {
+        setMessages(response.data)
+      })
+      .catch(err => {
+        // console.log(err);
+        if (err && err.response && err.response.data && err.response.data.message)
+          makeToast('error', err.response.data.message)
+      })
+
     if (socket) {
       socket.emit('joinRoom', {
         chatRoomId

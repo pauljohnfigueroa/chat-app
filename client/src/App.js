@@ -5,6 +5,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import ChatRoom from './pages/ChatRoom'
+import Chat from './pages/ChatUser'
 import { io } from 'socket.io-client'
 import makeToast from './Toaster'
 
@@ -55,6 +56,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard socket={socket} />} />
           <Route path="/chatrooms/:chatRoomId" element={<ChatRoom socket={socket} />} />
+          <Route path="/chat/:chatId/:uId" element={<Chat socket={socket} />} />
         </Routes>
       </BrowserRouter>
     </div>

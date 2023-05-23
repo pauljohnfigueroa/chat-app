@@ -55,11 +55,16 @@ export const register = async (req, res) => {
       password: passwordHash
     })
     // save new user
-    const savedUser = await newUser.save()
+    await newUser.save()
 
     // response
     res.status(201).json({ message: `User ${name} was registered successfully.` })
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
+}
+
+export const getUsers = async (req, res) => {
+  const users = await User.find()
+  res.status(201).json(users)
 }

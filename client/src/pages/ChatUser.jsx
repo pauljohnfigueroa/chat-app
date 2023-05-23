@@ -3,54 +3,57 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import makeToast from '../Toaster'
 
-const ChatRoom = ({ socket }) => {
-  const { chatRoomId } = useParams() // chatroom id
+const Chat = ({ socket }) => {
+  const { chatId, uId } = useParams() // chatroom id
 
   const [messages, setMessages] = useState([])
-  const [chatRoomName, setChatRoomName] = useState('')
+  const [chatName, setChatName] = useState('')
   const [userId, setUserId] = useState('')
   const messageRef = useRef()
+
+  console.log(chatId, uId)
 
   const sendMessage = () => {
     // console.log('sendMessage clicked')
     if (socket) {
       // console.log('sendMessage clicked If')
-      socket.emit('chatroomMessage', {
-        chatRoomId,
-        message: messageRef.current.value
+      socket.emit('private-message', {
+        message: messageRef.current.value,
+        to: chatId
       })
       messageRef.current.value = ''
     }
   }
 
   useEffect(() => {
-    const token = localStorage.getItem('chatapp_token')
-
-    // get own id
-    if (token) {
-      const payload = JSON.parse(window.atob(token.split('.')[1]))
-      setUserId(payload.id)
-    }
     // new messages
     if (socket) {
-      socket.on('newGroupMessage', message => {
-        const newMessages = [...messages, message]
-        setMessages(newMessages)
-      })
+      socket.on('private-message', message => setMessages([...messages, message]))
     }
     // eslint-disable-next-line
-  }, [messages])
+    console.log(messages)
+  }, [messages, setMessages])
 
   useEffect(() => {
-    // get chatroom name
+    const token = localStorage.getItem('chatapp_token')
+    // get own id
+    let pl = ''
+    if (token) {
+      const payload = JSON.parse(window.atob(token.split('.')[1]))
+      console.log('pl', payload)
+      pl = payload
+      setUserId(payload.id)
+    }
+
+    // get chat name
     axios
-      .get(`http://localhost:8000/chatrooms/${chatRoomId}`, {
+      .get(`http://localhost:8000/chat/${chatId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
         }
       })
       .then(response => {
-        setChatRoomName(response.data)
+        setChatName(response.data)
       })
       .catch(err => {
         // console.log(err);
@@ -60,7 +63,7 @@ const ChatRoom = ({ socket }) => {
 
     // fetch messages history
     axios
-      .get(`http://localhost:8000/messages/${chatRoomId}`, {
+      .get(`http://localhost:8000/messages/${chatId}/${pl.id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
         }
@@ -75,15 +78,13 @@ const ChatRoom = ({ socket }) => {
       })
 
     if (socket) {
-      socket.emit('joinRoom', chatRoomId, message => message)
+      socket.emit('chatUser', socket.id)
     }
 
     return () => {
       //Component Unmount
       if (socket) {
-        socket.emit('leaveRoom', {
-          chatRoomId
-        })
+        socket.emit('leaveChat', socket.id)
       }
     }
     //eslint-disable-next-line
@@ -92,13 +93,14 @@ const ChatRoom = ({ socket }) => {
   return (
     <div className="chatroomPage">
       <div className="chatroomSection">
-        <div className="cardHeader">Chatroom: {chatRoomName && chatRoomName[0].name}</div>
+        <div className="cardHeader">{chatName && chatName.name}</div>
         <div className="chatroomContent">
           {messages.map((message, idx) => (
             <div key={`${message}-${idx}`} className="message">
               <span className={userId === message.userId ? 'ownMessage' : 'otherMessage'}>
-                {message.name}:
-              </span>{' '}
+                {message.name}
+                {'> '}
+              </span>
               {message.message}
             </div>
           ))}
@@ -123,4 +125,4 @@ const ChatRoom = ({ socket }) => {
   )
 }
 
-export default ChatRoom
+export default Chat

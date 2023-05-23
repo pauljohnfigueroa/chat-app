@@ -16,6 +16,7 @@ import corsOptions from './config/corsOptions.js'
 /* Routes */
 import userRoutes from './routes/users.js'
 import chatroomRoutes from './routes/chatroom.js'
+import chatRoutes from './routes/chat.js'
 import messageRoutes from './routes/messages.js'
 
 /* Middleware */
@@ -28,6 +29,7 @@ app.use(cors(corsOptions))
 
 /* Routes */
 app.use('/users', userRoutes)
+app.use('/chat', chatRoutes)
 app.use('/chatrooms', chatroomRoutes)
 app.use('/messages', messageRoutes)
 
@@ -79,6 +81,7 @@ const io = new Server(server, {
 /* io */
 io.use(async (socket, next) => {
   try {
+    // get id from the token
     const token = socket.handshake.query.token
     const payload = await jwt.verify(token, process.env.JWT_SECRET)
     socket.userId = payload.id
@@ -87,18 +90,22 @@ io.use(async (socket, next) => {
 })
 
 io.on('connection', socket => {
-  console.log(`Connected: ${socket.userId}`)
+  // socket.userId is from the token
+  console.log(`Message from Server - Connected: ${socket.userId}`)
 
   socket.on('disconnect', () => {
-    console.log(`Disconnected: ${socket.userId}`)
+    console.log(`Message from Server - Disconnected: ${socket.userId}`)
   })
 
-  socket.on('joinRoom', ({ chatRoomId }) => {
+  // Group chat
+  socket.on('joinRoom', (chatRoomId, cb) => {
     socket.join(chatRoomId)
+    cb(`Joined ${chatRoomId}`)
+
     console.log(`A user joined ${chatRoomId}`)
   })
 
-  socket.on('leaveRoom', ({ chatRoomId }) => {
+  socket.on('leaveRoom', chatRoomId => {
     socket.leave(chatRoomId)
     console.log(`A user left ${chatRoomId}`)
   })
@@ -112,13 +119,47 @@ io.on('connection', socket => {
         message
       })
 
-      io.to(chatRoomId).emit('newMessage', {
+      io.to(chatRoomId).emit('newGroupMessage', {
         message,
         name: user.name,
         userId: socket.userId
       })
 
       await newMessage.save()
+    }
+  })
+
+  //Individual chat
+  socket.on('chatUser', ({ chatId }) => {
+    socket.join(chatId)
+    console.log(`A user messaged ${chatId}`)
+  })
+
+  socket.on('leaveChat', ({ chatId }) => {
+    socket.leave(chatId)
+    console.log(`A user left ${chatId}`)
+  })
+
+  socket.on('private-message', async ({ message, to }) => {
+    if (message.trim().length > 0) {
+      const user = await User.findOne({ _id: socket.userId })
+      console.log(message, to)
+      const newMessage = new Message({
+        chatroom: to,
+        user: socket.userId,
+        message
+      })
+
+      await newMessage.save()
+
+      // changed from io. to socket.
+      // io. broadcast including sender
+      // socket. broadcast not including sender
+      io.to(to).emit('private-message', {
+        message,
+        name: user.name,
+        userId: socket.userId
+      })
     }
   })
 })

@@ -1,4 +1,6 @@
 import ChatRoom from '../models/ChatRoom.js'
+import mongoose from 'mongoose'
+const ObjectId = mongoose.Types.ObjectId
 
 export const createChatRoom = async (req, res) => {
   try {
@@ -25,4 +27,10 @@ export const createChatRoom = async (req, res) => {
 export const getAllChatrooms = async (req, res) => {
   const chatrooms = await ChatRoom.find({})
   res.status(201).json(chatrooms)
+}
+
+export const getChatRoom = async (req, res) => {
+  const { chatRoomId } = req.params
+  const chatroom = await ChatRoom.find({ _id: new ObjectId(chatRoomId) })
+  res.status(201).json(chatroom)
 }

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-// import makeToast from '../Toaster'
 
 const Users = ({ socket }) => {
   const [users, setUsers] = useState([])
@@ -53,13 +52,6 @@ const Users = ({ socket }) => {
       })
   }
 
-  // const handleOpenChatWindow = id => {
-  //   console.log('handleOpenChatWindow', id)
-  //   setChatRoomId(id)
-  //   setIsMessageBoxOpen(true)
-  //   setMessages([])
-  // }
-
   useEffect(() => {
     getUsers()
     const token = localStorage.getItem('chatapp_token')
@@ -77,7 +69,7 @@ const Users = ({ socket }) => {
       <div className="container">
         <div className="card">
           <div className="chatrooms">
-            {/* Display Users */}
+            {/* Display User */}
             {users.map(
               user =>
                 user._id === userId && (
@@ -96,11 +88,12 @@ const Users = ({ socket }) => {
                   user =>
                     user._id !== userId && (
                       <div key={user._id} className="chatroom">
-                        {/* <Link to={`/chat/${user._id}/${userId}/646da315232f438f60d8ed05`}> */}
-                        <div onClick={() => createPrivateChatRoom(user._id, userId)}>
+                        <span
+                          className="menu-items"
+                          onClick={() => createPrivateChatRoom(user._id, userId)}
+                        >
                           {user.name}
-                        </div>
-                        {/* </Link> */}
+                        </span>
                       </div>
                     )
                 )}

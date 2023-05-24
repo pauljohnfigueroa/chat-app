@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import makeToast from '../Toaster'
 
 const Chatrooms = ({ socket }) => {
   const [chatrooms, setChatrooms] = useState([])
   const chatroomNameRef = useRef()
+
+  const navigate = useNavigate()
 
   const getChatRooms = () => {
     axios
@@ -20,6 +22,10 @@ const Chatrooms = ({ socket }) => {
       .catch(error => {
         setTimeout(getChatRooms, 3000)
       })
+  }
+
+  const createGroupChatRoom = room => {
+    navigate(`/chatrooms/${room}`)
   }
 
   useEffect(() => {
@@ -61,19 +67,19 @@ const Chatrooms = ({ socket }) => {
           <div className="header">Rooms</div>
           <div className="cardBody">
             <div className="inputGroup">
-              <div className="chatrooms">
-                {/* Display chatrooms */}
-                {chatrooms.map(chatroom => (
-                  <div key={chatroom._id} className="chatroom">
-                    <Link to={`/chatrooms/${chatroom._id}`}>
-                      <div>{chatroom.name}</div>
-                    </Link>
-                  </div>
-                ))}
-              </div>
               {/* <label htmlFor="name">Chatroom Name</label> */}
               <input type="text" name="name" id="name" ref={chatroomNameRef} />
               <button onClick={createChatroom}>Create Room</button>
+            </div>
+            <div className="chatrooms">
+              {/* Display chatrooms */}
+              {chatrooms.map(chatroom => (
+                <div className="menu-items" key={chatroom._id}>
+                  {/* <Link to={`/chatrooms/${chatroom._id}`}> */}
+                  <span onClick={() => createGroupChatRoom(chatroom._id)}>{chatroom.name}</span>
+                  {/* </Link> */}
+                </div>
+              ))}
             </div>
           </div>
         </div>

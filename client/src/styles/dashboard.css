@@ -7,15 +7,6 @@ body {
   font-family: Poppins, sans-serif;
 }
 
-.button {
-  background-color: rgb(189, 140, 235);
-  border: none;
-  border-radius: 25px;
-  padding: 8px;
-  cursor: pointer;
-  position: absolute;
-  bottom: 0;
-}
 .main-container {
   display: flex;
 }
@@ -29,14 +20,17 @@ body {
   height: 100%;
   padding: 1rem;
 }
-
-.container {
-  /* border: 1px dashed blue; */
+.menu-items {
+  cursor: pointer;
+}
+.menu-items:hover {
+  color: blueviolet;
 }
 
 .header {
   font-size: 1rem;
   font-weight: bold;
+  margin: 10px 0;
 }
 
 /* Chatroom */

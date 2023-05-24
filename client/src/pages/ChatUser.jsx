@@ -43,6 +43,7 @@ const Chat = ({ socket }) => {
     const token = localStorage.getItem('chatapp_token')
     // get own id
     let pl = ''
+
     if (token) {
       const payload = JSON.parse(window.atob(token.split('.')[1]))
       console.log('pl', payload)
@@ -58,7 +59,7 @@ const Chat = ({ socket }) => {
         }
       })
       .then(response => {
-        setChatName(response.data)
+        setChatName(response.data.name)
       })
       .catch(err => {
         // console.log(err);
@@ -116,20 +117,18 @@ const Chat = ({ socket }) => {
             </div>
           ))}
         </div>
-        <div className="chatroomActions">
-          <div>
-            <input
-              type="text"
-              name="message"
-              placeholder="Type your message here."
-              ref={messageRef}
-            />
-          </div>
-          <div>
-            <button className="join" onClick={sendMessage}>
-              Send
-            </button>
-          </div>
+        <div className="message-box-actions">
+          <input
+            className="message-input"
+            type="text"
+            name="message"
+            placeholder="Type your message here."
+            ref={messageRef}
+          />
+
+          <button className="send-message-button" onClick={sendMessage}>
+            Send
+          </button>
         </div>
       </div>
     </div>

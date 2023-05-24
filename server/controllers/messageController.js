@@ -38,7 +38,8 @@ export const getAllMessages = async (req, res) => {
 export const getAllUserMessages = async (req, res) => {
   const { chatRoomId, userId } = req.params
 
-  // We use mongodb aggregation $match to get all the messages for the pair of users only
+  // We use mongodb aggregation $match to get all the
+  // messages for the pair of users only
   // and $lookup then get the user's Name
   const messages = await Message.aggregate([
     {
@@ -65,6 +66,5 @@ export const getAllUserMessages = async (req, res) => {
       }
     }
   ])
-  // console.log(messages)
   res.status(201).json(messages)
 }

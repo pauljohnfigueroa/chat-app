@@ -53,7 +53,6 @@ const ChatRoom = ({ socket }) => {
         setChatRoomName(response.data)
       })
       .catch(err => {
-        // console.log(err);
         if (err && err.response && err.response.data && err.response.data.message)
           makeToast('error', err.response.data.message)
       })
@@ -104,21 +103,18 @@ const ChatRoom = ({ socket }) => {
             </div>
           ))}
         </div>
-        <div className="chatroomActions">
-          <div>
-            <input
-              className="message-input"
-              type="text"
-              name="message"
-              placeholder="Type your message here."
-              ref={messageRef}
-            />
-          </div>
-          <div>
-            <button className="button" onClick={sendMessage}>
-              Send
-            </button>
-          </div>
+        <div className="message-box-actions">
+          <input
+            className="message-input"
+            type="text"
+            name="message"
+            placeholder="Type your message here."
+            ref={messageRef}
+          />
+
+          <button className="send-message-button" onClick={sendMessage}>
+            Send
+          </button>
         </div>
       </div>
     </div>

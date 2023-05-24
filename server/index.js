@@ -86,7 +86,6 @@ io.use(async (socket, next) => {
   try {
     // get id from the token
     const token = socket.handshake.query.token
-    // const payload = await jwt.verify(token, process.env.JWT_SECRET)
     const payload = jwt.verify(token, process.env.JWT_SECRET)
     socket.userId = payload.id
     next()
@@ -134,21 +133,10 @@ io.on('connection', socket => {
   })
 
   // private chat
-  // socket.on('setup', userData => {
-  //   socket.join(userData._id)
-  //   socket.emit('connected')
-  // })
   socket.on('setup', ({ chatRoomId }) => {
     socket.join(chatRoomId)
-    // socket.emit('connected')
     console.log(`A user joined setup ${chatRoomId}`)
   })
-
-  // join private users
-  // socket.on('join-chat', room => {
-  //   socket.join(room)
-  //   console.log(`User joined room: ${room}`)
-  // })
 
   socket.on('leaveChat', ({ chatId }) => {
     socket.leave(chatId)
@@ -156,6 +144,7 @@ io.on('connection', socket => {
   })
 
   socket.on('private-message', async ({ message, to }) => {
+    // do not process a black message
     if (message.trim().length > 0) {
       const user = await User.findOne({ _id: socket.userId })
       console.log(message, to)
@@ -164,10 +153,9 @@ io.on('connection', socket => {
         user: socket.userId,
         message
       })
-
+      // save the new message to database
       await newMessage.save()
 
-      // changed from io. to socket.
       // io. broadcast including sender
       // socket. broadcast not including sender
       io.to(to).emit('private-message', {

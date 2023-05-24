@@ -14,10 +14,12 @@ export const createChatRoom = async (req, res) => {
     }
 
     const chatroom = new ChatRoom({
-      name
+      name,
+      isGroupChat: true
     })
 
     const savedChatroom = await chatroom.save()
+
     res.status(201).json({ message: `${name} room was successfully created.` })
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -25,7 +27,7 @@ export const createChatRoom = async (req, res) => {
 }
 
 export const getAllChatrooms = async (req, res) => {
-  const chatrooms = await ChatRoom.find({})
+  const chatrooms = await ChatRoom.find({ isGroupChat: true })
   res.status(201).json(chatrooms)
 }
 

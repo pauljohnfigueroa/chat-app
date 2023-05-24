@@ -21,6 +21,7 @@ export const getChat = async (req, res) => {
 export const getChatName = async (req, res) => {
   const { chatId } = req.params
   const chatName = await User.find({ _id: new ObjectId(chatId) })
+
   res.status(201).json(chatName)
 }
 
@@ -30,11 +31,14 @@ export const createChat = async (req, res) => {
     console.log('createChat userId', name)
     console.log('createChat chatId', users)
     // check if the email already exists
-    const chatroomExists = await ChatRoom.findOne({ users: { $in: users } })
+    const chatroomExists = await ChatRoom.findOne({
+      name: { $in: users },
+      users: { $all: users }
+    })
     if (chatroomExists) {
+      console.log('Chat room already exists.')
       console.log(chatroomExists)
-      res.status(500).json(chatroomExists)
-      return
+      return res.status(200).json(chatroomExists)
     }
 
     // create a room for private chat
@@ -46,7 +50,7 @@ export const createChat = async (req, res) => {
     const savedChatroom = await chatroom.save()
 
     console.log(savedChatroom)
-    res.status(201).json(savedChatroom)
+    return res.status(201).json(savedChatroom)
   } catch (error) {
     res.status(500).json({ message: error.message })
   }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 // import makeToast from '../Toaster'
 
@@ -10,8 +10,10 @@ const Users = ({ socket }) => {
 
   console.log(users._id, userId)
 
+  let navigate = useNavigate()
+
   const createPrivateChatRoom = async (roomId, userId) => {
-    await axios
+    const response = await axios
       .post(
         'http://localhost:8000/chat',
         {
@@ -25,8 +27,11 @@ const Users = ({ socket }) => {
         }
       )
       .then(response => {
+        console.log('Create room')
         console.log(response.data)
         setChatRoomId(response.data._id)
+        navigate(`/chat/${roomId}/${userId}/${response.data._id}`)
+        //console.log('response.data._id', response.data._id)
       })
       .catch(error => {
         console.log(error.message)
@@ -91,11 +96,11 @@ const Users = ({ socket }) => {
                   user =>
                     user._id !== userId && (
                       <div key={user._id} className="chatroom">
-                        <Link to={`/chat/${user._id}/${userId}/646da315232f438f60d8ed05`}>
-                          <div onClick={() => createPrivateChatRoom(user._id, userId)}>
-                            {user.name}
-                          </div>
-                        </Link>
+                        {/* <Link to={`/chat/${user._id}/${userId}/646da315232f438f60d8ed05`}> */}
+                        <div onClick={() => createPrivateChatRoom(user._id, userId)}>
+                          {user.name}
+                        </div>
+                        {/* </Link> */}
                       </div>
                     )
                 )}

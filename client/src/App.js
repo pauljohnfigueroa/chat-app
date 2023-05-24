@@ -33,8 +33,8 @@ function App() {
       })
 
       newSocket.on('connect', () => {
-        //console.log('Socket connected!')
-        makeToast('success', 'Socket connected!')
+        console.log('Socket connected!')
+        //makeToast('success', 'Socket connected!')
       })
 
       setSocket(newSocket)

@@ -9,6 +9,7 @@ const Chat = ({ socket }) => {
   const [messages, setMessages] = useState([])
   const [chatName, setChatName] = useState('')
   const [userId, setUserId] = useState('')
+  const [socketConnected, setSocketConnected] = useState(false)
   const messageRef = useRef()
 
   console.log(chatId, uId)
@@ -26,13 +27,17 @@ const Chat = ({ socket }) => {
   }
 
   useEffect(() => {
+    //socket.emit('setup', chatId)
+  })
+
+  useEffect(() => {
     // new messages
     if (socket) {
       socket.on('private-message', message => setMessages([...messages, message]))
     }
     // eslint-disable-next-line
     console.log(messages)
-  }, [messages, setMessages])
+  }, [socket, messages, setMessages])
 
   useEffect(() => {
     const token = localStorage.getItem('chatapp_token')
@@ -77,14 +82,20 @@ const Chat = ({ socket }) => {
           makeToast('error', err.response.data.message)
       })
 
+    //eslint-disable-next-line
+  }, [])
+
+  useState(() => {
     if (socket) {
-      socket.emit('chatUser', socket.id)
+      socket.emit('setup', { chatId })
+      socket.on('connection', () => {
+        setSocketConnected(true)
+      })
     }
 
     return () => {
-      //Component Unmount
       if (socket) {
-        socket.emit('leaveChat', socket.id)
+        socket.emit('leaveChat', { chatId })
       }
     }
     //eslint-disable-next-line

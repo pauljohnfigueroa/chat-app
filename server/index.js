@@ -72,6 +72,7 @@ const server = app.listen(PORT, () => {
 
 // Socket.io
 const io = new Server(server, {
+  pingTimeout: 300,
   cors: {
     origin: true,
     methods: ['GET', 'POST']
@@ -83,7 +84,8 @@ io.use(async (socket, next) => {
   try {
     // get id from the token
     const token = socket.handshake.query.token
-    const payload = await jwt.verify(token, process.env.JWT_SECRET)
+    // const payload = await jwt.verify(token, process.env.JWT_SECRET)
+    const payload = jwt.verify(token, process.env.JWT_SECRET)
     socket.userId = payload.id
     next()
   } catch (error) {}
@@ -91,10 +93,10 @@ io.use(async (socket, next) => {
 
 io.on('connection', socket => {
   // socket.userId is from the token
-  console.log(`Message from Server - Connected: ${socket.userId}`)
+  console.log(`io.on('connection') - Connected: ${socket.userId}`)
 
   socket.on('disconnect', () => {
-    console.log(`Message from Server - Disconnected: ${socket.userId}`)
+    console.log(`socket.on('disconnect') - Disconnected: ${socket.userId}`)
   })
 
   // Group chat
@@ -129,10 +131,21 @@ io.on('connection', socket => {
     }
   })
 
-  //Individual chat
-  socket.on('chatUser', ({ chatId }) => {
+  // private chat
+  // socket.on('setup', userData => {
+  //   socket.join(userData._id)
+  //   socket.emit('connected')
+  // })
+  socket.on('setup', ({ chatId }) => {
     socket.join(chatId)
-    console.log(`A user messaged ${chatId}`)
+    // socket.emit('connected')
+    console.log(`A user joined setup ${chatId}`)
+  })
+
+  // join private users
+  socket.on('join-chat', room => {
+    socket.join(room)
+    console.log(`User joined room: ${room}`)
   })
 
   socket.on('leaveChat', ({ chatId }) => {

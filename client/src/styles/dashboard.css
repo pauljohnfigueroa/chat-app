@@ -7,17 +7,31 @@ body {
   font-family: Poppins, sans-serif;
 }
 
+.button {
+  background-color: rgb(189, 140, 235);
+  border: none;
+  border-radius: 25px;
+  padding: 8px;
+  cursor: pointer;
+  position: absolute;
+  bottom: 0;
+}
+.main-container {
+  display: flex;
+}
+
 .sidebar {
   display: flex;
   flex-direction: column;
-  background-color: rgb(192, 192, 192);
+  /* border: 1px dashed rgb(6, 255, 19); */
+
   width: 250px;
-  height: 100vh;
+  height: 100%;
   padding: 1rem;
 }
 
 .container {
-  height: 50%;
+  /* border: 1px dashed blue; */
 }
 
 .header {
@@ -28,4 +42,8 @@ body {
 /* Chatroom */
 .chatroom {
   position: relative;
+}
+
+.open-chat-window {
+  cursor: pointer;
 }

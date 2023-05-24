@@ -1,8 +1,11 @@
 import ChatRoom from './ChatRoom'
 import Users from '../components/Users'
 import Chatrooms from '../components/Chatrooms'
+import { useState } from 'react'
 
-const DashboardPage = ({ socket }) => {
+const DashboardPage = ({ socket, setMessages }) => {
+  const [isMessageBoxOpen, setIsMessageBoxOpen] = useState(false)
+  const [chatRoomId, setChatRoomId] = useState(null)
   //const [chatrooms, setChatrooms] = useState([])
   // const [users, setUsers] = useState([])
   //const chatroomNameRef = useRef()
@@ -72,13 +75,23 @@ const DashboardPage = ({ socket }) => {
 
   return (
     <>
-      <div className="sidebar">
-        {/* Users */}
-        <Users socket={socket} />
-        {/* Chat rooms */}
-        <Chatrooms socket={socket} />
+      <div className="main-container">
+        <div className="sidebar">
+          {/* Users */}
+          <Users
+            socket={socket}
+            setChatRoomId={setChatRoomId}
+            setIsMessageBoxOpen={setIsMessageBoxOpen}
+            setMessages={setMessages}
+          />
+          {/* Chat rooms */}
+          <Chatrooms socket={socket} />
+        </div>
+        <div className="message-box-container">
+          {' '}
+          {isMessageBoxOpen && <ChatRoom chatRoomId={chatRoomId} socket={socket} />}
+        </div>
       </div>
-      <div className="chatroom"> {false && <ChatRoom socket={socket} />}</div>
     </>
   )
 }

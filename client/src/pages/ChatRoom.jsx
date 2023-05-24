@@ -12,9 +12,9 @@ const ChatRoom = ({ socket }) => {
   const messageRef = useRef()
 
   const sendMessage = () => {
-    // console.log('sendMessage clicked')
+    console.log('sendMessage clicked')
     if (socket) {
-      // console.log('sendMessage clicked If')
+      console.log('sendMessage clicked If')
       socket.emit('chatroomMessage', {
         chatRoomId,
         message: messageRef.current.value
@@ -60,7 +60,7 @@ const ChatRoom = ({ socket }) => {
 
     // fetch messages history
     axios
-      .get(`http://localhost:8000/messages/${chatRoomId}`, {
+      .get(`http://localhost:8000/messages/${chatRoomId}/${userId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
         }
@@ -92,13 +92,14 @@ const ChatRoom = ({ socket }) => {
   return (
     <div className="chatroomPage">
       <div className="chatroomSection">
-        <div className="cardHeader">Chatroom: {chatRoomName && chatRoomName[0].name}</div>
+        <div className="cardHeader">{chatRoomName && chatRoomName.name}</div>
         <div className="chatroomContent">
           {messages.map((message, idx) => (
             <div key={`${message}-${idx}`} className="message">
               <span className={userId === message.userId ? 'ownMessage' : 'otherMessage'}>
                 {message.name}:
-              </span>{' '}
+              </span>
+              {'> '}
               {message.message}
             </div>
           ))}
@@ -106,6 +107,7 @@ const ChatRoom = ({ socket }) => {
         <div className="chatroomActions">
           <div>
             <input
+              className="message-input"
               type="text"
               name="message"
               placeholder="Type your message here."
@@ -113,7 +115,7 @@ const ChatRoom = ({ socket }) => {
             />
           </div>
           <div>
-            <button className="join" onClick={sendMessage}>
+            <button className="button" onClick={sendMessage}>
               Send
             </button>
           </div>

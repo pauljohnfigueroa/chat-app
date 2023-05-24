@@ -22,6 +22,13 @@ const Users = ({ socket }) => {
       })
   }
 
+  // const handleOpenChatWindow = id => {
+  //   console.log('handleOpenChatWindow', id)
+  //   setChatRoomId(id)
+  //   setIsMessageBoxOpen(true)
+  //   setMessages([])
+  // }
+
   useEffect(() => {
     getUsers()
     const token = localStorage.getItem('chatapp_token')

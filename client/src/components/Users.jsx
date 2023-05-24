@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 const Users = ({ socket }) => {
@@ -26,11 +26,10 @@ const Users = ({ socket }) => {
         }
       )
       .then(response => {
-        console.log('Create room')
-        console.log(response.data)
+        //console.log('Create room')
+        //console.log(response.data)
         setChatRoomId(response.data._id)
         navigate(`/chat/${roomId}/${userId}/${response.data._id}`)
-        //console.log('response.data._id', response.data._id)
       })
       .catch(error => {
         console.log(error.message)

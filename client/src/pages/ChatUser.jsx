@@ -9,10 +9,10 @@ const Chat = ({ socket }) => {
   const [messages, setMessages] = useState([])
   const [chatName, setChatName] = useState('')
   const [userId, setUserId] = useState('')
-  const [socketConnected, setSocketConnected] = useState(false)
+  //const [socketConnected, setSocketConnected] = useState(false)
   const messageRef = useRef()
 
-  console.log(chatId, uId, chatRoomId)
+  //console.log(chatId, uId, chatRoomId)
 
   const sendMessage = () => {
     // console.log('sendMessage clicked')
@@ -36,7 +36,7 @@ const Chat = ({ socket }) => {
       socket.on('private-message', message => setMessages([...messages, message]))
     }
     // eslint-disable-next-line
-    console.log(messages)
+    //console.log(messages)
   }, [socket, messages, setMessages])
 
   useEffect(() => {
@@ -46,20 +46,20 @@ const Chat = ({ socket }) => {
 
     if (token) {
       const payload = JSON.parse(window.atob(token.split('.')[1]))
-      console.log('pl', payload)
+      //console.log('pl', payload)
       pl = payload
       setUserId(payload.id)
     }
 
     // get chat name
     axios
-      .get(`http://localhost:8000/chat/${chatId}`, {
+      .get(`http://localhost:8000/chat/${chatRoomId}/${pl.id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
         }
       })
       .then(response => {
-        setChatName(response.data.name)
+        setChatName(response.data)
       })
       .catch(err => {
         // console.log(err);
@@ -89,9 +89,9 @@ const Chat = ({ socket }) => {
   useState(() => {
     if (socket) {
       socket.emit('setup', { chatRoomId })
-      socket.on('connection', () => {
-        setSocketConnected(true)
-      })
+      // socket.on('connection', () => {
+      //   setSocketConnected(true)
+      // })
     }
 
     return () => {
@@ -104,13 +104,17 @@ const Chat = ({ socket }) => {
 
   return (
     <div className="chatroomPage">
-      <div className="chatroomSection">
-        <div className="cardHeader">{chatName && chatName.name}</div>
-        <div className="chatroomContent">
+      <div className="chatroom-section">
+        <div className="card-header">{chatName && chatName[0].name}</div>
+        {/* <div className="card-header">Headera sdfasdf asdfasfasd</div> */}
+        <div className="message-box-content">
           {messages.map((message, idx) => (
-            <div key={`${message}-${idx}`} className="message">
+            <div
+              key={`${message}-${idx}`}
+              className={userId === message.userId ? 'myMessage' : 'message'}
+            >
               <span className={userId === message.userId ? 'ownMessage' : 'otherMessage'}>
-                {message.name}
+                {userId === message.userId ? 'You' : message.name}
                 {'> '}
               </span>
               {message.message}

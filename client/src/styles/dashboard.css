@@ -41,3 +41,27 @@ body {
 .open-chat-window {
   cursor: pointer;
 }
+
+.room-actions {
+  padding: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.create-room-button {
+  background-color: rgb(189, 140, 235);
+  color: rgb(47, 46, 48);
+  font-size: 0.8rem;
+  text-align: center;
+  font-weight: bold;
+  border: none;
+  width: 20%;
+  height: 42px;
+  border-radius: 0 4px 4px 0;
+  min-width: 60px;
+  padding: 8px;
+  cursor: pointer;
+}
+.create-room-button:hover {
+  background-color: rgb(205, 162, 245);
+}

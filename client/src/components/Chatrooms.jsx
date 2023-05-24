@@ -68,8 +68,18 @@ const Chatrooms = ({ socket }) => {
           <div className="cardBody">
             <div className="inputGroup">
               {/* <label htmlFor="name">Chatroom Name</label> */}
-              <input type="text" name="name" id="name" ref={chatroomNameRef} />
-              <button onClick={createChatroom}>Create Room</button>
+              <div className="room-actions">
+                <input
+                  className="message-input"
+                  type="text"
+                  name="name"
+                  id="name"
+                  ref={chatroomNameRef}
+                />
+                <button className="create-room-button" onClick={createChatroom}>
+                  Create
+                </button>
+              </div>
             </div>
             <div className="chatrooms">
               {/* Display chatrooms */}

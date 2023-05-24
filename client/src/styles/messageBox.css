@@ -1,3 +1,26 @@
+.chatroom-section {
+  width: 40vw;
+  height: 80vh;
+  margin: auto;
+  border: 1px solid #dddddd;
+  border-radius: 10px;
+  position: relative;
+}
+
+.card-header {
+  background: #d0b7ff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2px;
+  text-transform: uppercase;
+  /* transform: skewY(-4deg); */
+  font-size: 1.1rem;
+  font-weight: bold;
+  display: inline-block;
+  position: absolute;
+  top: -1rem;
+  left: -0.75rem;
+}
+
 .message-box-actions {
   position: absolute;
   bottom: 0;
@@ -6,7 +29,6 @@
   padding: 0.5rem;
   display: flex;
   justify-content: space-between;
-  border-top: 1px solid #eee;
 }
 
 .message-box-container {
@@ -25,12 +47,12 @@
 
 .message-box-content {
   position: absolute;
-  border: 1px solid rgb(236, 236, 236);
+  /* border: 1px solid rgb(238, 238, 238); */
   top: 2.5rem;
   left: 0;
   right: 0;
   bottom: 3.5rem;
-  padding: 0.5rem;
+  padding: 2rem;
   overflow: auto;
 }
 
@@ -54,4 +76,23 @@
   min-width: 60px;
   padding: 8px;
   cursor: pointer;
+}
+
+.message {
+  margin-bottom: 0.25rem;
+}
+
+.myMessage {
+  margin-bottom: 0.25rem;
+  text-align: right;
+}
+
+.otherMessage {
+  color: #3cbd00;
+  font-weight: bold;
+}
+
+.ownMessage {
+  color: #c200f3;
+  font-weight: bold;
 }

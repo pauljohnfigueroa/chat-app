@@ -19,10 +19,20 @@ export const getChat = async (req, res) => {
 }
 
 export const getChatName = async (req, res) => {
-  const { chatId } = req.params
-  const chatName = await User.find({ _id: new ObjectId(chatId) })
+  const { chatRoomId, userId } = req.params
+  const chatName = await ChatRoom.find({ _id: chatRoomId })
 
-  res.status(201).json(chatName)
+  console.log('chatName', chatName)
+
+  // if the name of chatroom is not equal to the id of the current user
+  //
+  const chatUser =
+    chatName[0].name !== userId
+      ? await User.find({ _id: chatName[0].name })
+      : await User.find({ _id: userId })
+
+  console.log('chatUser', chatUser)
+  res.status(201).json(chatUser)
 }
 
 export const createChat = async (req, res) => {

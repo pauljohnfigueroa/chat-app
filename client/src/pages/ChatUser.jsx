@@ -84,7 +84,7 @@ const Chat = ({ socket }) => {
 
     return () => {
       if (socket) {
-        socket.emit('leaveChat', { chatId })
+        socket.emit('leaveChat', { chatRoomId })
       }
     }
     //eslint-disable-next-line

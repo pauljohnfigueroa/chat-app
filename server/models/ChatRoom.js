@@ -4,7 +4,14 @@ const chatRoomSchema = new mongoose.Schema({
   name: {
     type: String,
     required: 'Name is required.'
-  }
+  },
+  users: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      required: 'At least two users are required.',
+      ref: 'User'
+    }
+  ]
 })
 
 const ChatRoom = mongoose.model('ChatRoom', chatRoomSchema)

@@ -74,7 +74,7 @@ const server = app.listen(PORT, () => {
 
 // Socket.io
 const io = new Server(server, {
-  pingTimeout: 300,
+  pingTimeout: 60,
   cors: {
     origin: true,
     methods: ['GET', 'POST']

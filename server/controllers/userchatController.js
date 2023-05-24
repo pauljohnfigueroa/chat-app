@@ -1,7 +1,8 @@
+import mongoose from 'mongoose'
+
 import User from '../models/User.js'
 import ChatRoom from '../models/ChatRoom.js'
 
-import mongoose from 'mongoose'
 const ObjectId = mongoose.Types.ObjectId
 
 export const getChat = async (req, res) => {
@@ -21,15 +22,21 @@ export const getChat = async (req, res) => {
 export const getChatName = async (req, res) => {
   const { chatRoomId, userId } = req.params
   const chatName = await ChatRoom.find({ _id: chatRoomId })
-
+  console.log('userId', userId)
   console.log('chatName', chatName)
-
-  // if the name of chatroom is not equal to the id of the current user
-  //
-  const chatUser =
-    chatName[0].name !== userId
-      ? await User.find({ _id: chatName[0].name })
-      : await User.find({ _id: userId })
+  console.log('chatName[0].name', chatName)
+  // get the human name of the private chatroom
+  let chatUser = []
+  if (chatName[0].name !== userId) {
+    console.log('IF STATEMENT')
+    chatUser = await User.find({ _id: chatName[0].name })
+  } else {
+    console.log('ELSE STATEMENT')
+    // get the other user's name
+    const otherUser = chatName[0].users.filter(item => !new ObjectId(userId).equals(item))
+    console.log('otherUser', otherUser)
+    chatUser = await User.find({ _id: otherUser })
+  }
 
   console.log('chatUser', chatUser)
   res.status(201).json(chatUser)

@@ -9,26 +9,18 @@ const Chat = ({ socket }) => {
   const [messages, setMessages] = useState([])
   const [chatName, setChatName] = useState('')
   const [userId, setUserId] = useState('')
-  //const [socketConnected, setSocketConnected] = useState(false)
   const messageRef = useRef()
 
-  //console.log(chatId, uId, chatRoomId)
-
   const sendMessage = () => {
-    // console.log('sendMessage clicked')
     if (socket) {
-      // console.log('sendMessage clicked If')
       socket.emit('private-message', {
         message: messageRef.current.value,
         to: chatRoomId
       })
+      // clear the message input
       messageRef.current.value = ''
     }
   }
-
-  useEffect(() => {
-    //socket.emit('setup', chatId)
-  })
 
   useEffect(() => {
     // new messages
@@ -36,24 +28,23 @@ const Chat = ({ socket }) => {
       socket.on('private-message', message => setMessages([...messages, message]))
     }
     // eslint-disable-next-line
-    //console.log(messages)
   }, [socket, messages, setMessages])
 
   useEffect(() => {
     const token = localStorage.getItem('chatapp_token')
     // get own id
-    let pl = ''
+    let myId = ''
 
     if (token) {
       const payload = JSON.parse(window.atob(token.split('.')[1]))
       //console.log('pl', payload)
-      pl = payload
+      myId = payload
       setUserId(payload.id)
     }
 
     // get chat name
     axios
-      .get(`http://localhost:8000/chat/${chatRoomId}/${pl.id}`, {
+      .get(`http://localhost:8000/chat/${chatRoomId}/${myId.id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
         }
@@ -69,7 +60,7 @@ const Chat = ({ socket }) => {
 
     // fetch messages history
     axios
-      .get(`http://localhost:8000/messages/${chatRoomId}/${pl.id}`, {
+      .get(`http://localhost:8000/messages/${chatRoomId}/${myId.id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
         }
@@ -89,9 +80,6 @@ const Chat = ({ socket }) => {
   useState(() => {
     if (socket) {
       socket.emit('setup', { chatRoomId })
-      // socket.on('connection', () => {
-      //   setSocketConnected(true)
-      // })
     }
 
     return () => {

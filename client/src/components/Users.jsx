@@ -6,11 +6,12 @@ import axios from 'axios'
 const Users = ({ socket }) => {
   const [users, setUsers] = useState([])
   const [userId, setUserId] = useState('')
+  const [chatRoomId, setChatRoomId] = useState('')
 
   console.log(users._id, userId)
 
-  const createPrivateChatRoom = (roomId, userId) => {
-    axios
+  const createPrivateChatRoom = async (roomId, userId) => {
+    await axios
       .post(
         'http://localhost:8000/chat',
         {
@@ -25,14 +26,15 @@ const Users = ({ socket }) => {
       )
       .then(response => {
         console.log(response.data)
+        setChatRoomId(response.data._id)
       })
       .catch(error => {
         console.log(error.message)
       })
   }
 
-  const getUsers = () => {
-    axios
+  const getUsers = async () => {
+    await axios
       .get('http://localhost:8000/users', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
@@ -89,7 +91,7 @@ const Users = ({ socket }) => {
                   user =>
                     user._id !== userId && (
                       <div key={user._id} className="chatroom">
-                        <Link to={`/chat/${user._id}/${userId}`}>
+                        <Link to={`/chat/${user._id}/${userId}/646da315232f438f60d8ed05`}>
                           <div onClick={() => createPrivateChatRoom(user._id, userId)}>
                             {user.name}
                           </div>

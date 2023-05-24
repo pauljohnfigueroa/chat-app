@@ -56,7 +56,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard socket={socket} />} />
           <Route path="/chatrooms/:chatRoomId" element={<ChatRoom socket={socket} />} />
-          <Route path="/chat/:chatId/:uId" element={<Chat socket={socket} />} />
+          <Route path="/chat/:chatId/:uId/:chatRoomId" element={<Chat socket={socket} />} />
         </Routes>
       </BrowserRouter>
     </div>

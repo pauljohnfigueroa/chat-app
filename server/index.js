@@ -138,17 +138,17 @@ io.on('connection', socket => {
   //   socket.join(userData._id)
   //   socket.emit('connected')
   // })
-  socket.on('setup', ({ chatId }) => {
-    socket.join(chatId)
+  socket.on('setup', ({ chatRoomId }) => {
+    socket.join(chatRoomId)
     // socket.emit('connected')
-    console.log(`A user joined setup ${chatId}`)
+    console.log(`A user joined setup ${chatRoomId}`)
   })
 
   // join private users
-  socket.on('join-chat', room => {
-    socket.join(room)
-    console.log(`User joined room: ${room}`)
-  })
+  // socket.on('join-chat', room => {
+  //   socket.join(room)
+  //   console.log(`User joined room: ${room}`)
+  // })
 
   socket.on('leaveChat', ({ chatId }) => {
     socket.leave(chatId)

@@ -4,7 +4,7 @@ import axios from 'axios'
 import makeToast from '../Toaster'
 
 const Chat = ({ socket }) => {
-  const { chatId, uId } = useParams() // chatroom id
+  const { chatId, uId, chatRoomId } = useParams() // chatroom id
 
   const [messages, setMessages] = useState([])
   const [chatName, setChatName] = useState('')
@@ -12,7 +12,7 @@ const Chat = ({ socket }) => {
   const [socketConnected, setSocketConnected] = useState(false)
   const messageRef = useRef()
 
-  console.log(chatId, uId)
+  console.log(chatId, uId, chatRoomId)
 
   const sendMessage = () => {
     // console.log('sendMessage clicked')
@@ -20,7 +20,7 @@ const Chat = ({ socket }) => {
       // console.log('sendMessage clicked If')
       socket.emit('private-message', {
         message: messageRef.current.value,
-        to: chatId
+        to: chatRoomId
       })
       messageRef.current.value = ''
     }
@@ -68,7 +68,7 @@ const Chat = ({ socket }) => {
 
     // fetch messages history
     axios
-      .get(`http://localhost:8000/messages/${chatId}/${pl.id}`, {
+      .get(`http://localhost:8000/messages/${chatRoomId}/${pl.id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
         }
@@ -87,7 +87,7 @@ const Chat = ({ socket }) => {
 
   useState(() => {
     if (socket) {
-      socket.emit('setup', { chatId })
+      socket.emit('setup', { chatRoomId })
       socket.on('connection', () => {
         setSocketConnected(true)
       })

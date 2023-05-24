@@ -43,12 +43,7 @@ export const getAllUserMessages = async (req, res) => {
   const messages = await Message.aggregate([
     {
       $match: {
-        chatroom: { $in: [new ObjectId(chatRoomId), new ObjectId(userId)] }
-      }
-    },
-    {
-      $match: {
-        user: { $in: [new ObjectId(chatRoomId), new ObjectId(userId)] }
+        chatroom: new ObjectId(chatRoomId)
       }
     },
     {

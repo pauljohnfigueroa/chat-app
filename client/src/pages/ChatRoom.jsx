@@ -1,26 +1,30 @@
 import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import makeToast from '../Toaster'
 
 const ChatRoom = ({ socket }) => {
-  const { chatRoomId } = useParams() // chatroom id
-
   const [messages, setMessages] = useState([])
   const [chatRoomName, setChatRoomName] = useState('')
   const [userId, setUserId] = useState('')
+
+  const { chatRoomId } = useParams()
   const messageRef = useRef()
+  const navigate = useNavigate()
 
   const sendMessage = () => {
-    console.log('sendMessage clicked')
     if (socket) {
-      console.log('sendMessage clicked If')
       socket.emit('chatroomMessage', {
         chatRoomId,
         message: messageRef.current.value
       })
       messageRef.current.value = ''
     }
+  }
+
+  const handleLeaveRoom = () => {
+    socket.emit('leave-room', { chatRoomId })
+    navigate('/dashboard')
   }
 
   useEffect(() => {
@@ -67,10 +71,9 @@ const ChatRoom = ({ socket }) => {
       .then(response => {
         setMessages(response.data)
       })
-      .catch(err => {
-        // console.log(err);
-        if (err && err.response && err.response.data && err.response.data.message)
-          makeToast('error', err.response.data.message)
+      .catch(error => {
+        if (error && error.response && error.response.data && error.response.data.message)
+          makeToast('error', error.response.data.message)
       })
 
     if (socket) {
@@ -78,11 +81,8 @@ const ChatRoom = ({ socket }) => {
     }
 
     return () => {
-      //Component Unmount
       if (socket) {
-        socket.emit('leaveRoom', {
-          chatRoomId
-        })
+        socket.emit('leaveRoom', { chatRoomId })
       }
     }
     //eslint-disable-next-line
@@ -90,15 +90,23 @@ const ChatRoom = ({ socket }) => {
 
   return (
     <div className="chatroomPage">
-      <div className="chatroomSection">
-        <div className="cardHeader">{chatRoomName && chatRoomName.name}</div>
-        <div className="chatroomContent">
+      <div className="chatroom-section">
+        <div className="">
+          <div className="card-header">{chatRoomName && chatRoomName[0].name}</div>
+          <button className="leave-room-button" onClick={handleLeaveRoom}>
+            Leave
+          </button>
+        </div>
+        <div className="message-box-content">
           {messages.map((message, idx) => (
-            <div key={`${message}-${idx}`} className="message">
+            <div
+              key={`${message}-${idx}`}
+              className={userId === message.userId ? 'myMessage' : 'message'}
+            >
               <span className={userId === message.userId ? 'ownMessage' : 'otherMessage'}>
-                {message.name}:
+                {userId === message.userId ? 'You' : message.name}
+                {'> '}
               </span>
-              {'> '}
               {message.message}
             </div>
           ))}
@@ -111,7 +119,6 @@ const ChatRoom = ({ socket }) => {
             placeholder="Type your message here."
             ref={messageRef}
           />
-
           <button className="send-message-button" onClick={sendMessage}>
             Send
           </button>

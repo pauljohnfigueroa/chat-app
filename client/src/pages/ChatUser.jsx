@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import makeToast from '../Toaster'
 
@@ -10,6 +10,8 @@ const Chat = ({ socket }) => {
   const [chatName, setChatName] = useState('')
   const [userId, setUserId] = useState('')
   const messageRef = useRef()
+
+  const navigate = useNavigate()
 
   const sendMessage = () => {
     if (socket) {
@@ -22,8 +24,13 @@ const Chat = ({ socket }) => {
     }
   }
 
+  const handleLeaveRoom = () => {
+    socket.emit('leave-room', { chatRoomId })
+    navigate('/dashboard')
+  }
+
   useEffect(() => {
-    // new messages
+    // new message
     if (socket) {
       socket.on('private-message', message => setMessages([...messages, message]))
     }
@@ -52,10 +59,9 @@ const Chat = ({ socket }) => {
       .then(response => {
         setChatName(response.data)
       })
-      .catch(err => {
-        // console.log(err);
-        if (err && err.response && err.response.data && err.response.data.message)
-          makeToast('error', err.response.data.message)
+      .catch(error => {
+        if (error && error.response && error.response.data && error.response.data.message)
+          makeToast('error', error.response.data.message)
       })
 
     // fetch messages history
@@ -68,10 +74,9 @@ const Chat = ({ socket }) => {
       .then(response => {
         setMessages(response.data)
       })
-      .catch(err => {
-        // console.log(err);
-        if (err && err.response && err.response.data && err.response.data.message)
-          makeToast('error', err.response.data.message)
+      .catch(error => {
+        if (error && error.response && error.response.data && error.response.data.message)
+          makeToast('error', error.response.data.message)
       })
 
     //eslint-disable-next-line
@@ -82,18 +87,19 @@ const Chat = ({ socket }) => {
       socket.emit('setup', { chatRoomId })
     }
 
-    return () => {
-      if (socket) {
-        socket.emit('leaveChat', { chatRoomId })
-      }
-    }
     //eslint-disable-next-line
   }, [])
 
   return (
     <div className="chatroomPage">
       <div className="chatroom-section">
-        <div className="card-header">{chatName && chatName[0].name}</div>
+        <div className="">
+          <div className="card-header">{chatName && chatName[0].name}</div>
+          <button className="leave-room-button" onClick={handleLeaveRoom}>
+            Leave
+          </button>
+        </div>
+
         {/* <div className="card-header">Headera sdfasdf asdfasfasd</div> */}
         <div className="message-box-content">
           {messages.map((message, idx) => (
@@ -117,7 +123,6 @@ const Chat = ({ socket }) => {
             placeholder="Type your message here."
             ref={messageRef}
           />
-
           <button className="send-message-button" onClick={sendMessage}>
             Send
           </button>

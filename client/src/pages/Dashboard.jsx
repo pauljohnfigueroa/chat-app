@@ -1,6 +1,8 @@
-import ChatRoom from './ChatRoom'
-import Users from '../components/Users'
-import Chatrooms from '../components/Chatrooms'
+// import ChatRoom from './ChatRoom'
+// import Users from '../components/Users'
+// import Chatrooms from '../components/Chatrooms'
+import Sidebar from '../components/Sidebar'
+
 import { useState } from 'react'
 
 const DashboardPage = ({ socket, setMessages }) => {
@@ -9,23 +11,30 @@ const DashboardPage = ({ socket, setMessages }) => {
 
   return (
     <>
-      <div className="main-container">
+      <Sidebar
+        chatRoomId={chatRoomId}
+        setChatRoomId={setChatRoomId}
+        setMessages={setMessages}
+        setIsMessageBoxOpen={setIsMessageBoxOpen}
+        socket={socket}
+      />
+      {/* <div className="main-container">
         <div className="sidebar">
-          {/* Users */}
+         
           <Users
             socket={socket}
             setChatRoomId={setChatRoomId}
             setIsMessageBoxOpen={setIsMessageBoxOpen}
             setMessages={setMessages}
           />
-          {/* Chat rooms */}
+          
           <Chatrooms socket={socket} />
         </div>
         <div className="message-box-container">
           {' '}
           {isMessageBoxOpen && <ChatRoom chatRoomId={chatRoomId} socket={socket} />}
         </div>
-      </div>
+      </div> */}
     </>
   )
 }

@@ -26,8 +26,6 @@ const Users = ({ socket }) => {
         }
       )
       .then(response => {
-        //console.log('Create room')
-        //console.log(response.data)
         setChatRoomId(response.data._id)
         navigate(`/chat/${roomId}/${userId}/${response.data._id}`)
       })

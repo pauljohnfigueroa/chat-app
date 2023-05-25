@@ -3,8 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import makeToast from '../Toaster'
 
-const Chat = ({ socket }) => {
-  const { chatRoomId } = useParams() // chatroom id
+const Chat = ({ socket, chatRoomId }) => {
+  //const { chatRoomId } = useParams() // chatroom id
 
   const [messages, setMessages] = useState([])
   const [chatName, setChatName] = useState('')
@@ -91,7 +91,7 @@ const Chat = ({ socket }) => {
   }, [])
 
   return (
-    <div className="dashboard">
+    <div className="main-content">
       <div className="message-box">
         <div>
           <div className="message-box-header">{chatName && chatName[0].name}</div>
@@ -128,44 +128,6 @@ const Chat = ({ socket }) => {
         </div>
       </div>
     </div>
-    // <div className="chatroomPage">
-    //   <div className="chatroom-section">
-    //     <div className="">
-    //       <div className="card-header">{chatName && chatName[0].name}</div>
-    //       <button className="leave-room-button" onClick={handleLeaveRoom}>
-    //         Leave
-    //       </button>
-    //     </div>
-
-    //     {/* <div className="card-header">Headera sdfasdf asdfasfasd</div> */}
-    //     <div className="message-box-content">
-    //       {messages.map((message, idx) => (
-    //         <div
-    //           key={`${message}-${idx}`}
-    //           className={userId === message.userId ? 'myMessage' : 'message'}
-    //         >
-    //           <span className={userId === message.userId ? 'ownMessage' : 'otherMessage'}>
-    //             {userId === message.userId ? 'You' : message.name}
-    //             {'> '}
-    //           </span>
-    //           {message.message}
-    //         </div>
-    //       ))}
-    //     </div>
-    //     <div className="message-box-actions">
-    //       <input
-    //         className="message-input"
-    //         type="text"
-    //         name="message"
-    //         placeholder="Type your message here."
-    //         ref={messageRef}
-    //       />
-    //       <button className="send-message-button" onClick={sendMessage}>
-    //         Send
-    //       </button>
-    //     </div>
-    //   </div>
-    // </div>
   )
 }
 

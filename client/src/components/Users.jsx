@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-const Users = ({ socket }) => {
+const Users = ({ socket, setIsMessageBoxOpen }) => {
   const [users, setUsers] = useState([])
   const [userId, setUserId] = useState('')
   const [chatRoomId, setChatRoomId] = useState('')
 
-  console.log(users._id, userId)
+  //console.log(users._id, userId)
 
   let navigate = useNavigate()
 
   const createPrivateChatRoom = async (roomId, userId) => {
-    const response = await axios
+    const resp = await axios
       .post(
         'http://localhost:8000/chat',
         {
@@ -32,6 +32,19 @@ const Users = ({ socket }) => {
       .catch(error => {
         console.log(error.message)
       })
+
+    // console.log('asdf', resp)
+    // // Open message box
+    // await axios
+    //   .get(`http://localhost:8000/chat/${roomId}/${userId}/${resp?.data?._id}`, {
+    //     headers: {
+    //       Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
+    //     }
+    //   })
+    //   .then(response => setIsMessageBoxOpen(true))
+    //   .catch(error => {
+    //     console.log(error.message)
+    //   })
   }
 
   const getUsers = async () => {

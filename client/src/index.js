@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-// import './styles/common.css'
-import './styles/chatroom.css'
+import './styles/common.css'
 import './styles/dashboard.css'
 import './styles/messageBox.css'
 

@@ -1,9 +1,7 @@
-// import ChatRoom from './ChatRoom'
-// import Users from '../components/Users'
-// import Chatrooms from '../components/Chatrooms'
-import Sidebar from '../components/Sidebar'
-
 import { useState } from 'react'
+import { Outlet } from 'react-router-dom'
+import MessageBox from '../pages/MessageBox'
+import Sidebar from '../components/Sidebar'
 
 const DashboardPage = ({ socket, setMessages }) => {
   const [isMessageBoxOpen, setIsMessageBoxOpen] = useState(false)
@@ -11,30 +9,18 @@ const DashboardPage = ({ socket, setMessages }) => {
 
   return (
     <>
-      <Sidebar
-        chatRoomId={chatRoomId}
-        setChatRoomId={setChatRoomId}
-        setMessages={setMessages}
-        setIsMessageBoxOpen={setIsMessageBoxOpen}
-        socket={socket}
-      />
-      {/* <div className="main-container">
-        <div className="sidebar">
-         
-          <Users
-            socket={socket}
+      <div className="dashboard">
+        <div>
+          <Sidebar
+            chatRoomId={chatRoomId}
             setChatRoomId={setChatRoomId}
-            setIsMessageBoxOpen={setIsMessageBoxOpen}
             setMessages={setMessages}
+            setIsMessageBoxOpen={setIsMessageBoxOpen}
+            socket={socket}
           />
-          
-          <Chatrooms socket={socket} />
         </div>
-        <div className="message-box-container">
-          {' '}
-          {isMessageBoxOpen && <ChatRoom chatRoomId={chatRoomId} socket={socket} />}
-        </div>
-      </div> */}
+        <div className="main-content">{false && <MessageBox />}</div>
+      </div>
     </>
   )
 }

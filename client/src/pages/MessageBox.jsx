@@ -25,8 +25,6 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
   }
 
   const handleLeaveRoom = () => {
-    console.log('handleLeaveRoom')
-
     setIsMessageBoxOpen(false)
 
     if (socket) {
@@ -39,7 +37,7 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
       console.log('setUserOffline useEffect')
 
       // Must be put in logout user logic
-      // Set isOnline to false
+      // Set isOnline to false in users collection
       const setUserOffline = async () => {
         await axios
           .post(
@@ -60,27 +58,6 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
       setUserOffline()
     }
   }
-
-  socket.on('offline-broadcast', () => {
-    const setUserOffline = async () => {
-      await axios
-        .post(
-          `http://localhost:8000/users/offline`,
-          {
-            userId
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
-            }
-          }
-        )
-        .catch(error => {
-          console.log(error.message)
-        })
-    }
-    setUserOffline()
-  })
 
   useEffect(() => {
     // new message

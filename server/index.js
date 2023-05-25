@@ -98,7 +98,7 @@ io.on('connection', socket => {
 
   socket.on('disconnect', () => {
     console.log(`socket.on('disconnect') - Disconnected: ${socket.userId}`)
-    // User log's
+    // User log's out
     socket.broadcast.emit('offline-broadcast', socket.userId)
     console.log(`socket.broadcast.emit - disconnect: ${socket.userId}`)
   })
@@ -112,6 +112,11 @@ io.on('connection', socket => {
   socket.on('offline-status', () => {
     socket.broadcast.emit('offline-broadcast', socket.userId)
     console.log(`socket.on('offline-status') - OFFLINE: ${socket.userId}`)
+  })
+
+  // test
+  socket.on('test', message => {
+    console.log(`socket.on('test') - OFFLINE: ${message}`)
   })
 
   // Group chat

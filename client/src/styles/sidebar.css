@@ -1,0 +1,66 @@
+.list-group {
+  color: rgb(235, 235, 235);
+}
+
+.list-item-container {
+  display: flex;
+  align-items: center;
+}
+
+.list-item {
+  /* border: 1px dashed green; */
+  background-color: rgb(86, 5, 110);
+  width: 60%;
+  margin: 2px 4px;
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.list-item:hover {
+  background-color: rgb(114, 4, 148);
+  cursor: pointer;
+}
+
+.avatar {
+  vertical-align: middle;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.user-status-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: right;
+  /* border: 1px dashed blue; */
+  padding-right: 10px;
+  /* width: 20%; */
+  border-radius: 50%;
+  /* background-color: rgb(89, 8, 194); */
+}
+
+.user-status-indicator-online {
+  color: rgb(4, 238, 31);
+}
+
+.user-status-indicator-offline {
+  color: rgb(124, 124, 124);
+}
+
+.message-notif-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: right;
+  /* border: 1px dashed blue; */
+  padding-right: 10px;
+  width: 20%;
+}
+
+.account-header {
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  gap: 10px;
+}

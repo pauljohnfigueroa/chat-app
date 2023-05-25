@@ -3,34 +3,6 @@ import jwt from 'jsonwebtoken'
 
 import User from '../models/User.js'
 
-export const login = async (req, res) => {
-  try {
-    // get the login parameters
-    const { email, password } = req.body
-
-    // check if the email exists in the database
-    const user = await User.findOne({ email })
-
-    // return error if the email does not exists
-    if (!user) return res.status(400).json({ message: 'Invalid credentials.' })
-
-    // If the email exists, check the password
-    const isPwdMatch = await bcrypt.compare(password, user.password)
-    // If password does not match
-    if (!isPwdMatch) return res.status(400).json({ message: 'Invalid credentials.' })
-
-    // if everything is OK
-    // do not send the password to the front end
-    user.password = undefined
-    // generate token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
-    // send credentials to the front end
-    res.status(200).json({ user, token, message: `Sucessfully logged in` })
-  } catch (error) {
-    res.status(500).json({ error: error.message })
-  }
-}
-
 export const register = async (req, res) => {
   try {
     // get the user information from the form using req.body
@@ -64,7 +36,63 @@ export const register = async (req, res) => {
   }
 }
 
+export const login = async (req, res) => {
+  try {
+    // get the login parameters
+    const { email, password } = req.body
+
+    // check if the email exists in the database
+    const user = await User.findOne({ email })
+
+    // return error if the email does not exists
+    if (!user) return res.status(400).json({ message: 'Invalid credentials.' })
+
+    // If the email exists, check the password
+    const isPwdMatch = await bcrypt.compare(password, user.password)
+    // If password does not match
+    if (!isPwdMatch) return res.status(400).json({ message: 'Invalid credentials.' })
+
+    // if everything is OK
+    // do not send the password to the front end
+    user.password = undefined
+    // generate token
+    await User.findOneAndUpdate({ email }, { isOnline: true })
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
+    // send credentials to the front end
+    res.status(200).json({ user, token, message: `Sucessfully logged in` })
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+}
+
+export const logout = () => {
+  console.log('logout')
+}
+
 export const getUsers = async (req, res) => {
-  const users = await User.find()
-  res.status(201).json(users)
+  try {
+    const users = await User.find()
+    res.status(201).json(users)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+
+export const getOnlineUsers = async (req, res) => {
+  try {
+    const users = await User.find({ isOnline: true }).select({ _id: 1 })
+    res.status(201).json(users)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+
+export const setUserOffline = async (req, res) => {
+  const { userId } = req.body
+  try {
+    const user = await User.findOneAndUpdate({ _id: userId }, { isOnline: false })
+    res.status(201).json(user)
+  } catch (error) {
+    res.status(500).json(error)
+  }
 }

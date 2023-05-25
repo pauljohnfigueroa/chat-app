@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import makeToast from '../Toaster'
 
@@ -63,35 +63,35 @@ const Chatrooms = ({ socket }) => {
   return (
     <>
       <div className="container">
-        <div className="card">
-          <div className="header">Rooms</div>
-          <div className="cardBody">
-            <div className="inputGroup">
-              {/* <label htmlFor="name">Chatroom Name</label> */}
-              <div className="room-actions">
-                <input
-                  className="message-input"
-                  type="text"
-                  name="name"
-                  id="name"
-                  ref={chatroomNameRef}
-                />
-                <button className="create-room-button" onClick={createChatroom}>
-                  Create
-                </button>
+        <div className="header">Rooms</div>
+        {/* <label htmlFor="name">Chatroom Name</label> */}
+        <div className="room-actions">
+          <input
+            className="message-input"
+            type="text"
+            name="name"
+            id="name"
+            ref={chatroomNameRef}
+          />
+          <button className="create-room-button" onClick={createChatroom}>
+            Create
+          </button>
+        </div>
+
+        <div className="list-group">
+          {/* Display chatrooms */}
+          {chatrooms.map(chatroom => (
+            <div className="list-item-container" key={chatroom._id}>
+              <div>
+                <img src="assets/jazz.png" alt="Avatar" className="avatar" />
               </div>
+              {/* <Link to={`/chatrooms/${chatroom._id}`}> */}
+              <div className="list-item" onClick={() => createGroupChatRoom(chatroom._id)}>
+                {chatroom.name}
+              </div>
+              {/* </Link> */}
             </div>
-            <div className="chatrooms">
-              {/* Display chatrooms */}
-              {chatrooms.map(chatroom => (
-                <div className="menu-items" key={chatroom._id}>
-                  {/* <Link to={`/chatrooms/${chatroom._id}`}> */}
-                  <span onClick={() => createGroupChatRoom(chatroom._id)}>{chatroom.name}</span>
-                  {/* </Link> */}
-                </div>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </>

@@ -1,0 +1,7 @@
+input[type='text']:focus {
+  outline: none;
+  border-top: 1px solid rgb(238, 90, 252);
+  border-top: 1px solid rgb(238, 90, 252);
+  border-top: 1px solid rgb(238, 90, 252);
+  border-right: none;
+}

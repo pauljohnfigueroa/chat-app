@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+// import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import makeToast from '../Toaster'
 
-const Chat = ({ socket, chatRoomId }) => {
+const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
   //const { chatRoomId } = useParams() // chatroom id
 
   const [messages, setMessages] = useState([])
@@ -11,7 +11,7 @@ const Chat = ({ socket, chatRoomId }) => {
   const [userId, setUserId] = useState('')
   const messageRef = useRef()
 
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
   const sendMessage = () => {
     if (socket) {
@@ -25,9 +25,62 @@ const Chat = ({ socket, chatRoomId }) => {
   }
 
   const handleLeaveRoom = () => {
-    socket.emit('leave-room', { chatRoomId })
-    navigate('/dashboard')
+    console.log('handleLeaveRoom')
+
+    setIsMessageBoxOpen(false)
+
+    if (socket) {
+      socket.emit('leave-room', chatRoomId)
+      // Inform other that you are going offline
+      socket.emit('offline-status', {
+        userId
+      })
+
+      console.log('setUserOffline useEffect')
+
+      // Must be put in logout user logic
+      // Set isOnline to false
+      const setUserOffline = async () => {
+        await axios
+          .post(
+            `http://localhost:8000/users/offline`,
+            {
+              userId
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
+              }
+            }
+          )
+          .catch(error => {
+            console.log(error.message)
+          })
+      }
+      setUserOffline()
+    }
   }
+
+  socket.on('offline-broadcast', () => {
+    const setUserOffline = async () => {
+      await axios
+        .post(
+          `http://localhost:8000/users/offline`,
+          {
+            userId
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
+            }
+          }
+        )
+        .catch(error => {
+          console.log(error.message)
+        })
+    }
+    setUserOffline()
+  })
 
   useEffect(() => {
     // new message
@@ -39,12 +92,12 @@ const Chat = ({ socket, chatRoomId }) => {
 
   useEffect(() => {
     const token = localStorage.getItem('chatapp_token')
+
     // get own id
     let myId = ''
 
     if (token) {
       const payload = JSON.parse(window.atob(token.split('.')[1]))
-      //console.log('pl', payload)
       myId = payload
       setUserId(payload.id)
     }
@@ -82,19 +135,20 @@ const Chat = ({ socket, chatRoomId }) => {
     //eslint-disable-next-line
   }, [])
 
-  useState(() => {
-    if (socket) {
-      socket.emit('setup', { chatRoomId })
-    }
-
-    //eslint-disable-next-line
-  }, [])
+  // useState(() => {
+  //   if (socket) {
+  //     socket.emit('private-chat', chatRoomId)
+  //   }
+  //   // eslint-disable-next-line
+  // }, [])
 
   return (
     <div className="main-content">
       <div className="message-box">
-        <div>
-          <div className="message-box-header">{chatName && chatName[0].name}</div>
+        <div className="message-box-header-container">
+          <div className="message-box-header">
+            <h3 className="message-box-header-text">{chatName && chatName[0].name}</h3>
+          </div>
           <button className="leave-room-button" onClick={handleLeaveRoom}>
             Leave
           </button>

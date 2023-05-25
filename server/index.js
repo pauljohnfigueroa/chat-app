@@ -98,6 +98,20 @@ io.on('connection', socket => {
 
   socket.on('disconnect', () => {
     console.log(`socket.on('disconnect') - Disconnected: ${socket.userId}`)
+    // User log's
+    socket.broadcast.emit('offline-broadcast', socket.userId)
+    console.log(`socket.broadcast.emit - disconnect: ${socket.userId}`)
+  })
+
+  // User log's in
+  socket.on('online-status', () => {
+    socket.broadcast.emit('online-broadcast', socket.userId)
+    console.log(`socket.on('online-status') - ONLINE: ${socket.userId}`)
+  })
+
+  socket.on('offline-status', () => {
+    socket.broadcast.emit('offline-broadcast', socket.userId)
+    console.log(`socket.on('offline-status') - OFFLINE: ${socket.userId}`)
   })
 
   // Group chat
@@ -133,21 +147,20 @@ io.on('connection', socket => {
   })
 
   // private chat
-  socket.on('setup', ({ chatRoomId }) => {
+  socket.on('private-chat', chatRoomId => {
     socket.join(chatRoomId)
-    console.log(`A user joined setup ${chatRoomId}`)
+    console.log(`A user private-chat(joined) ${chatRoomId}`)
   })
 
-  socket.on('leaveChat', ({ chatId }) => {
-    socket.leave(chatId)
-    console.log(`A user left ${chatId}`)
+  socket.on('leave-room', chatRoomId => {
+    socket.leave(chatRoomId)
+    console.log(`A user leave-room(left)  ${chatRoomId}`)
   })
 
   socket.on('private-message', async ({ message, to }) => {
     // do not process a black message
     if (message.trim().length > 0) {
       const user = await User.findOne({ _id: socket.userId })
-      console.log(message, to)
       const newMessage = new Message({
         chatroom: to,
         user: socket.userId,

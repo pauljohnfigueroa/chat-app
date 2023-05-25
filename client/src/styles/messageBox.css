@@ -1,41 +1,54 @@
 .message-box {
   /* border: 1px solid rgb(0, 255, 76); */
-  background-color: azure;
+  background-color: rgb(219, 147, 241);
+  border-radius: 10px;
   height: 80%;
   width: 80%;
   margin: auto;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
-
+.message-box-header-container {
+  width: 100%;
+  display: flex;
+}
 .message-box-header {
   background: #590261;
+  border-radius: 10px 0 0 0px;
   color: azure;
   font-size: 1.1rem;
   font-weight: bold;
   width: 100%;
   height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.message-box-header-text {
+  padding-left: 10px;
+  color: #f4c8ff;
 }
 
 .message-box-content {
-  /* border: 1px solid rgb(238, 238, 238); */
-  background-color: azure;
+  background-color: rgb(251, 240, 255);
   border: 1px solid rgb(235, 235, 235);
+  border-radius: 4px;
   width: 90%;
-  height: 70%;
-  padding: 0;
-  margin: 50px auto;
+  height: 90%;
+  margin: auto;
   overflow: auto;
 }
 
 .message-box-actions {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 0.5rem;
+  /* padding: 0.5rem; */
+  width: 90%;
+  margin: 20px auto;
   display: flex;
+  align-items: center;
   justify-content: space-between;
 }
+
 .message-input {
   border: 1px solid #cbb4f7;
   border-radius: 4px 0 0 4px;
@@ -47,6 +60,7 @@
 
 .leave-room-button {
   background-color: rgb(168, 0, 154);
+  border-radius: 0 10px 0 0;
   color: rgb(255, 255, 255);
   font-weight: bold;
   border: none;
@@ -54,10 +68,6 @@
   min-width: 10%;
   padding: 8px;
   cursor: pointer;
-
-  position: absolute;
-  top: 0;
-  right: 0;
 }
 
 .leave-room-button:hover {
@@ -76,6 +86,10 @@
   min-width: 60px;
   padding: 8px;
   cursor: pointer;
+}
+
+.send-message-button:hover {
+  background-color: rgb(128, 24, 224);
 }
 
 .message {

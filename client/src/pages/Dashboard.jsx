@@ -19,7 +19,16 @@ const DashboardPage = ({ socket, setMessages }) => {
             socket={socket}
           />
         </div>
-        <div className="main-content">{false && <MessageBox />}</div>
+        <div className="main-content">
+          <Outlet />
+          {isMessageBoxOpen && (
+            <MessageBox
+              setIsMessageBoxOpen={setIsMessageBoxOpen}
+              chatRoomId={chatRoomId}
+              socket={socket}
+            />
+          )}
+        </div>
       </div>
     </>
   )

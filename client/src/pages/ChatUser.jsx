@@ -84,7 +84,7 @@ const Chat = ({ socket }) => {
 
   useState(() => {
     if (socket) {
-      socket.emit('setup', { chatRoomId })
+      socket.emit('private-chat', { chatRoomId })
     }
 
     //eslint-disable-next-line
@@ -93,8 +93,10 @@ const Chat = ({ socket }) => {
   return (
     <div className="dashboard">
       <div className="message-box">
-        <div>
-          <div className="message-box-header">{chatName && chatName[0].name}</div>
+        <div className="message-box-header-container">
+          <div className="message-box-header">
+            <h3 className="message-box-header-text">{chatName && chatName[0].name}</h3>
+          </div>
           <button className="leave-room-button" onClick={handleLeaveRoom}>
             Leave
           </button>

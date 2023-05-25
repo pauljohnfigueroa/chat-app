@@ -15,6 +15,7 @@ export const getChat = async (req, res) => {
       }
     }
   ])
+  console.log(chat)
   res.status(201).json(chat)
 }
 

@@ -13,7 +13,8 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: 'Password is required.'
-    }
+    },
+    isOnline: { type: Boolean, default: false }
   },
   {
     timestamps: true

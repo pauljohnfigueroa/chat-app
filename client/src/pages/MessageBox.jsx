@@ -1,17 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-// import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import makeToast from '../Toaster'
 
 const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
-  //const { chatRoomId } = useParams() // chatroom id
-
   const [messages, setMessages] = useState([])
   const [chatName, setChatName] = useState('')
   const [userId, setUserId] = useState('')
   const messageRef = useRef()
-
-  // const navigate = useNavigate()
 
   const sendMessage = () => {
     if (socket) {
@@ -26,7 +21,6 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
 
   const handleLeaveRoom = () => {
     setIsMessageBoxOpen(false)
-    // console.log('setUserOffline useEffect')
 
     // use this in handle log out
     if (socket) {
@@ -35,27 +29,6 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
       socket.emit('offline-status', {
         userId
       })
-
-      // Must be put in logout user logic
-      // Set isOnline to false in users collection
-      // const setUserOffline = async () => {
-      //   await axios
-      //     .post(
-      //       `http://localhost:8000/users/offline`,
-      //       {
-      //         userId
-      //       },
-      //       {
-      //         headers: {
-      //           Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
-      //         }
-      //       }
-      //     )
-      //     .catch(error => {
-      //       console.log(error.message)
-      //     })
-      // }
-      // setUserOffline()
     }
   }
 
@@ -70,6 +43,7 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
   useEffect(() => {
     const token = sessionStorage.getItem('chatapp_token')
 
+    // Repeated code
     // get own id
     let myId = ''
 
@@ -111,13 +85,6 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
 
     //eslint-disable-next-line
   }, [])
-
-  // useState(() => {
-  //   if (socket) {
-  //     socket.emit('private-chat', chatRoomId)
-  //   }
-  //   // eslint-disable-next-line
-  // }, [])
 
   return (
     <div className="main-content">

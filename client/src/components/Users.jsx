@@ -121,13 +121,8 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
   useEffect(() => {
     if (socket) {
       socket.on('offline-broadcast', uid => {
-        //console.log('offline-broadcast')
-        // console.log('uid', uid)
-        // console.log('onlineUsers', onlineUsers)
         const filtered = onlineUsers.filter(id => id !== uid)
-        // console.log('filtered', filtered)
         setOnlineUsers(filtered)
-        // console.log('onlineUsers2', onlineUsers)
       })
     }
   }, [socket, onlineUsers])

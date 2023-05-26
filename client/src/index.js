@@ -5,6 +5,7 @@ import './styles/common.css'
 import './styles/dashboard.css'
 import './styles/messageBox.css'
 import './styles/sidebar.css'
+import './styles/login.css'
 
 import App from './App'
 

@@ -32,15 +32,41 @@ const LoginPage = ({ setupSocket }) => {
   }
 
   return (
-    <div className="card">
-      <div className="cardHeader">ChatApp Login</div>
-      <div className="cardBody">
-        <div className="inputGroup">
-          <label htmlFor="email">Email</label>
-          <input type="email" name="email" id="email" ref={emailRef} />
-          <label htmlFor="password">Password</label>
-          <input type="password" name="password" id="password" ref={passwordRef} />
-          <button onClick={loginUser}>Sign In</button>
+    <div className="form-outer-container">
+      <div className="form-container">
+        <div className="cardHeader">ChatApp Login</div>
+        <div className="cardBody">
+          <div className="inputGroup">
+            <form>
+              <div className="form-row">
+                <label className="form-item-label" htmlFor="email">
+                  Email
+                </label>
+                <input
+                  className="form-item  form-input"
+                  type="email"
+                  name="email"
+                  id="email"
+                  ref={emailRef}
+                />
+              </div>
+              <div className="form-row">
+                <label className="form-item-label" htmlFor="password">
+                  Password
+                </label>
+                <input
+                  className="form-item  form-input"
+                  type="password"
+                  name="password"
+                  id="password"
+                  ref={passwordRef}
+                />
+              </div>
+              <div className="form-row form-button">
+                <button onClick={loginUser}>Sign In</button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>

@@ -79,6 +79,9 @@ const RegisterPage = () => {
             <button onClick={registerUser}>Register</button>
           </div>
         </form>
+        <a href="/login" className="register-link">
+          Already have an account? Login here.
+        </a>
       </div>
     </div>
   )

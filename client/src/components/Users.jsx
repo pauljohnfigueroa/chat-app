@@ -134,27 +134,8 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
         const filtered = onlineUsers.filter(id => id !== uid)
         console.log('filtered', filtered)
         setOnlineUsers([...filtered])
-
-        // Set isOnline to false in users collection
-        axios
-          .post(
-            `http://localhost:8000/users/offline`,
-            {
-              userId: uid
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
-              }
-            }
-          )
-          .catch(error => {
-            console.log(error.message)
-          })
       })
     }
-
-    localStorage.removeItem('chatapp_token')
   }, [socket])
 
   return (

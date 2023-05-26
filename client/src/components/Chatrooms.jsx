@@ -35,7 +35,6 @@ const Chatrooms = ({ socket }) => {
 
   const createChatroom = () => {
     const chatroomName = chatroomNameRef.current.value
-
     axios
       .post(
         'http://localhost:8000/chatrooms',

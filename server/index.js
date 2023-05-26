@@ -96,11 +96,18 @@ io.on('connection', socket => {
   // socket.userId is from the token
   console.log(`io.on('connection') - Connected: ${socket.userId}`)
 
-  socket.on('disconnect', () => {
+  socket.on('disconnect', async () => {
     console.log(`socket.on('disconnect') - Disconnected: ${socket.userId}`)
     // User log's out
     socket.broadcast.emit('offline-broadcast', socket.userId)
     console.log(`socket.broadcast.emit - disconnect: ${socket.userId}`)
+    const userId = socket.userId
+    try {
+      const user = await User.findOneAndUpdate({ _id: userId }, { isOnline: false })
+      console.log(`socket.on('disconnect') - A user left the chat.`)
+    } catch (error) {
+      console.log(error.message)
+    }
   })
 
   // User log's in
@@ -109,9 +116,17 @@ io.on('connection', socket => {
     console.log(`socket.on('online-status') - ONLINE: ${socket.userId}`)
   })
 
-  socket.on('offline-status', () => {
+  socket.on('offline-status', async () => {
     socket.broadcast.emit('offline-broadcast', socket.userId)
-    console.log(`socket.on('offline-status') - OFFLINE: ${socket.userId}`)
+    console.log(`socket.on('offline-status') - OFFLINE - update DB: ${socket.userId}`)
+    // update the isOnline flag in database
+    const userId = socket.userId
+    try {
+      const user = await User.findOneAndUpdate({ _id: userId }, { isOnline: false })
+      console.log('A user left the chat.')
+    } catch (error) {
+      console.log(error.message)
+    }
   })
 
   // test

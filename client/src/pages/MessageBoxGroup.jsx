@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-// import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import makeToast from '../Toaster'
 
@@ -9,13 +8,13 @@ const ChatGroup = ({ socket, chatRoomId, setIsMessageBoxGroupOpen }) => {
   const [messages, setMessages] = useState([])
   const [chatName, setChatName] = useState('')
   const [userId, setUserId] = useState('')
-  const messageRef = useRef()
 
-  // const navigate = useNavigate()
+  const messageRef = useRef()
+  const messageEndRef = useRef(null)
 
   const sendMessage = () => {
     if (socket) {
-      socket.emit('chatroomMessage', {
+      socket.emit('group-message', {
         message: messageRef.current.value,
         to: chatRoomId
       })
@@ -26,22 +25,18 @@ const ChatGroup = ({ socket, chatRoomId, setIsMessageBoxGroupOpen }) => {
 
   const handleLeaveRoom = () => {
     setIsMessageBoxGroupOpen(false)
-    // console.log('setUserOffline useEffect')
 
     // use this in handle log out
     if (socket) {
+      // Notify others that you are going offline
       socket.emit('leave-room', chatRoomId)
-      // Inform other that you are going offline
-      // socket.emit('offline-status', {
-      //   userId
-      // })
     }
   }
 
   useEffect(() => {
     // new message
     if (socket) {
-      socket.on('newGroupMessage', message => setMessages([...messages, message]))
+      socket.on('group-chat', message => setMessages([...messages, message]))
     }
     // eslint-disable-next-line
   }, [socket, messages, setMessages])
@@ -91,12 +86,10 @@ const ChatGroup = ({ socket, chatRoomId, setIsMessageBoxGroupOpen }) => {
     //eslint-disable-next-line
   }, [])
 
-  // useState(() => {
-  //   if (socket) {
-  //     socket.emit('private-chat', chatRoomId)
-  //   }
-  //   // eslint-disable-next-line
-  // }, [])
+  // show latest message
+  useEffect(() => {
+    messageEndRef?.current.scrollIntoView()
+  }, [messages])
 
   return (
     <div className="main-content">
@@ -114,15 +107,22 @@ const ChatGroup = ({ socket, chatRoomId, setIsMessageBoxGroupOpen }) => {
           {messages.map((message, idx) => (
             <div
               key={`${message}-${idx}`}
-              className={userId === message.userId ? 'myMessage' : 'message'}
+              className={userId === message.userId ? 'my-message' : 'message'}
             >
-              <span className={userId === message.userId ? 'ownMessage' : 'otherMessage'}>
-                {userId === message.userId ? 'You' : message.name}
-                {'> '}
-              </span>
-              {message.message}
+              <div
+                className={
+                  userId === message.userId ? 'my-message-container' : 'other-message-container'
+                }
+              >
+                <div className={userId === message.userId ? 'ownMessage' : 'otherMessage'}>
+                  {userId === message.userId ? 'You' : message.name}
+                </div>
+                <div className="message-text">{message.message}</div>
+              </div>
             </div>
           ))}
+          {/* show the latest message */}
+          <div ref={messageEndRef} />
         </div>
         <div className="message-box-actions">
           <input

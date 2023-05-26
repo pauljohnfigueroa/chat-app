@@ -22,10 +22,11 @@
 
 .form-header {
   width: 100%;
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: bold;
   letter-spacing: 1.5px;
   text-align: center;
+  color: aliceblue;
 }
 
 .form-row {
@@ -60,10 +61,11 @@
 }
 
 .register-link {
-  color: rgb(255, 247, 172);
+  color: rgb(0, 247, 255);
   font-size: 0.9rem;
   margin-top: 10px;
 }
+
 .register-link:hover {
-  color: rgb(249, 228, 255);
+  color: rgb(0, 200, 207);
 }

@@ -47,11 +47,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
 }
 
 .message-input {
-  border: 1px solid #cbb4f7;
-  border-radius: 4px 0 0 4px;
+  border: none;
+  border-radius: 0;
   height: 40px;
   width: 80%;
   padding: 0 10px;
@@ -96,17 +97,64 @@
   margin-bottom: 0.25rem;
 }
 
-.myMessage {
+.message-text {
+  margin: 4px 10px 4px 2px;
+  font-size: 1.4rem;
+}
+
+.my-message {
   margin-bottom: 0.25rem;
   text-align: right;
 }
 
 .otherMessage {
-  color: #3cbd00;
-  font-weight: bold;
+  color: #811a00;
+  font-size: 0.8rem;
 }
 
 .ownMessage {
-  color: #c200f3;
-  font-weight: bold;
+  color: #92088b;
+  font-size: 0.8rem;
+}
+
+.my-message-container {
+  background-color: #bacbcf;
+  border-radius: 10px 0 0 10px;
+  padding: 10px;
+  min-width: 50px;
+  display: inline-block;
+}
+
+.other-message-container {
+  background-color: #f79bf2;
+  border-radius: 0 10px 10px 0;
+  padding: 10px;
+  min-width: 50px;
+  display: inline-block;
+}
+
+.quill-editing-area {
+  background-color: #bacbcf;
+}
+
+.picker-visible {
+  visibility: visible;
+  position: absolute;
+  left: 40px;
+  bottom: 50px;
+}
+
+.picker-hidden {
+  visibility: hidden;
+  height: 0;
+  position: absolute;
+  left: 40px;
+  bottom: 60vh;
+}
+
+.select-emoji {
+  height: 40px;
+  width: 50px;
+  border: none;
+  border-radius: 4px 0 0 4px;
 }

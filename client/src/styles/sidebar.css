@@ -2,6 +2,14 @@
   padding: 0;
   position: relative;
 }
+.app-name {
+  font-size: 1.8rem;
+  padding-left: 10px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: rgb(223, 223, 223);
+  background-color: rgb(114, 4, 148);
+}
 
 .list-group {
   color: rgb(235, 235, 235);
@@ -79,11 +87,17 @@
 
 .logout-button-container > button {
   position: absolute;
-  bottom: 10px;
+  font-size: large;
+  bottom: 2px;
   width: 100%;
   border: none;
-  background-color: rgb(255, 244, 146);
+  background-color: rgb(255, 153, 0);
+  color: rgb(39, 38, 38);
   height: 30px;
   text-transform: uppercase;
   cursor: pointer;
+}
+
+.logout-button-container > button:hover {
+  background-color: rgb(233, 140, 0);
 }

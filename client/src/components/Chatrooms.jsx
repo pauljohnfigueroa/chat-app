@@ -1,13 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-// import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import makeToast from '../Toaster'
 
 const Chatrooms = ({ socket, setChatRoomId, setIsMessageBoxGroupOpen }) => {
   const [chatrooms, setChatrooms] = useState([])
   const chatroomNameRef = useRef()
-
-  //const navigate = useNavigate()
 
   const getChatRooms = () => {
     axios
@@ -24,10 +21,6 @@ const Chatrooms = ({ socket, setChatRoomId, setIsMessageBoxGroupOpen }) => {
       })
   }
 
-  // const createGroupChatRoom = room => {
-  //   navigate(`/chatrooms/${room}`)
-  // }
-
   const joinChatRoom = async roomId => {
     console.log('joinChatRoom roomId', roomId)
     const resp = await axios
@@ -37,13 +30,11 @@ const Chatrooms = ({ socket, setChatRoomId, setIsMessageBoxGroupOpen }) => {
         }
       })
       .then(response => {
-        console.log('response', response)
         setChatRoomId(response.data[0]._id)
-        console.log(response.data)
         return response.data
       })
       .catch(error => {
-        //console.log(error.message)
+        console.log(error.message)
       })
 
     if (socket) {
@@ -92,8 +83,7 @@ const Chatrooms = ({ socket, setChatRoomId, setIsMessageBoxGroupOpen }) => {
       .catch(error => {
         console.log(error.message)
         if (error && error.response && error.response.data && error.response.data.message)
-          console.log('ERROR')
-        //makeToast('error', error.response.data.message)
+          makeToast('error', error.response.data.message)
       })
   }
 
@@ -101,7 +91,6 @@ const Chatrooms = ({ socket, setChatRoomId, setIsMessageBoxGroupOpen }) => {
     <>
       <div className="container">
         <div className="header">Rooms</div>
-        {/* <label htmlFor="name">Chatroom Name</label> */}
         <div className="room-actions">
           <input
             className="message-input"
@@ -122,11 +111,9 @@ const Chatrooms = ({ socket, setChatRoomId, setIsMessageBoxGroupOpen }) => {
               <div>
                 <img src="assets/jazz.png" alt="Avatar" className="avatar" />
               </div>
-              {/* <Link to={`/chatrooms/${chatroom._id}`}> */}
               <div className="list-item" onClick={() => joinChatRoom(chatroom._id)}>
                 {chatroom.name}
               </div>
-              {/* </Link> */}
             </div>
           ))}
         </div>

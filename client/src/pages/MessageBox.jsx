@@ -2,13 +2,50 @@ import { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import makeToast from '../Toaster'
 
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
+
+// import ReactQuill from 'react-quill'
+// import 'react-quill/dist/quill.snow.css'
+// import parse from 'html-react-parser'
+
+// const modules = {
+//   toolbar: [
+//     [{ header: [1, 2, false] }],
+//     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+//     [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+//     ['image'],
+//     ['clean']
+//   ]
+// }
+
+// const formats = [
+//   'header',
+//   'bold',
+//   'italic',
+//   'underline',
+//   'strike',
+//   'blockquote',
+//   'list',
+//   'bullet',
+//   'indent',
+//   'link',
+//   'image'
+// ]
+
 const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
   const [messages, setMessages] = useState([])
   const [chatName, setChatName] = useState('')
   const [userId, setUserId] = useState('')
-  const messageRef = useRef()
+  const [isPickerVisible, setIsPickerVisible] = useState(false)
+  // const [quillValue, setQuillValue] = useState('')
+
+  const messageRef = useRef('')
+  const messageEndRef = useRef(null)
 
   const sendMessage = () => {
+    // console.log(messageRef.current.value)
+
     if (socket) {
       socket.emit('private-message', {
         message: messageRef.current.value,
@@ -24,13 +61,17 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
 
     // use this in handle log out
     if (socket) {
+      // Notify others that you are going offline
       socket.emit('leave-room', chatRoomId)
-      // Inform other that you are going offline
-      // socket.emit('offline-status', {
-      //   userId
-      // })
     }
   }
+
+  // const rteChange = (content, delta, source, editor) => {
+  //   console.log(editor.getHTML()) // rich text
+  //   setQuillValue(editor.getHTML())
+  //   // console.log(editor.getText()) // plain text
+  //   // console.log(editor.getLength()) // number of characters
+  // }
 
   useEffect(() => {
     // new message
@@ -86,6 +127,10 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
     //eslint-disable-next-line
   }, [])
 
+  useEffect(() => {
+    messageEndRef?.current.scrollIntoView()
+  }, [messages])
+
   return (
     <div className="main-content">
       <div className="message-box">
@@ -102,17 +147,37 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
           {messages.map((message, idx) => (
             <div
               key={`${message}-${idx}`}
-              className={userId === message.userId ? 'myMessage' : 'message'}
+              className={userId === message.userId ? 'my-message' : 'message'}
             >
-              <span className={userId === message.userId ? 'ownMessage' : 'otherMessage'}>
-                {userId === message.userId ? 'You' : message.name}
-                {'> '}
-              </span>
-              {message.message}
+              <div
+                className={
+                  userId === message.userId ? 'my-message-container' : 'other-message-container'
+                }
+              >
+                <div className={userId === message.userId ? 'ownMessage' : 'otherMessage'}>
+                  {userId === message.userId ? 'You' : message.name}
+                </div>
+                <div className="message-text">{message.message}</div>
+              </div>
             </div>
           ))}
+          {/* show the latest message */}
+          <div ref={messageEndRef} />
         </div>
+
         <div className="message-box-actions">
+          <button className="select-emoji" onClick={() => setIsPickerVisible(!isPickerVisible)}>
+            😀
+          </button>
+          <div className={isPickerVisible ? 'picker-visible' : 'picker-hidden'}>
+            <Picker
+              data={data}
+              onEmojiSelect={e => {
+                setIsPickerVisible(!isPickerVisible)
+                messageRef.current.value = `${messageRef.current.value}${e.native}`
+              }}
+            />
+          </div>
           <input
             className="message-input"
             type="text"
@@ -120,6 +185,7 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
             placeholder="Type your message here."
             ref={messageRef}
           />
+
           <button className="send-message-button" onClick={sendMessage}>
             Send
           </button>

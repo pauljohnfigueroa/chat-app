@@ -61,6 +61,8 @@ const Sidebar = ({
 
   return (
     <div className="sidebar">
+      {/* App name */}
+      <div className="app-name">FrankensChat</div>
       {/* Users */}
       <Users
         socket={socket}
@@ -75,7 +77,7 @@ const Sidebar = ({
         setIsMessageBoxGroupOpen={setIsMessageBoxGroupOpen}
       />
       <div className="logout-button-container">
-        <button onClick={logOut}>Logout</button>
+        <button onClick={logOut}>Log out</button>
       </div>
     </div>
   )

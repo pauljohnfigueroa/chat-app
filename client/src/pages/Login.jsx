@@ -35,7 +35,7 @@ const LoginPage = ({ setupSocket }) => {
   return (
     <div className="form-outer-container">
       <div className="form-container">
-        <div className="form-header">ChatApp</div>
+        <div className="form-header">FrankensChat</div>
 
         <form>
           <div className="form-row">

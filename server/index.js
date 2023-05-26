@@ -129,18 +129,25 @@ io.on('connection', socket => {
     }
   })
 
-  // Group chat
+  /* Leave room */
+  socket.on('leave-room', chatRoomId => {
+    socket.leave(chatRoomId)
+    console.log(`A user left private room (event: 'leave-room')  ${chatRoomId}`)
+  })
+
+  /* Group chat */
   socket.on('group-chat', chatRoomId => {
     socket.join(chatRoomId)
-    console.log(`A user joined ${chatRoomId}`)
+    console.log(`A user joined the group chat (event: 'group-chat') ${chatRoomId}`)
   })
 
-  socket.on('leaveRoom', chatRoomId => {
-    socket.leave(chatRoomId)
-    console.log(`A user left ${chatRoomId}`)
-  })
+  // socket.on('leaveRoom', chatRoomId => {
+  //   socket.leave(chatRoomId)
+  //   console.log(`A user left ${chatRoomId}`)
+  // })
 
-  socket.on('chatroomMessage', async ({ message, to }) => {
+  /* Group message */
+  socket.on('group-message', async ({ message, to }) => {
     if (message.trim().length > 0) {
       const user = await User.findOne({ _id: socket.userId })
       const newMessage = new Message({
@@ -149,7 +156,7 @@ io.on('connection', socket => {
         message
       })
 
-      io.to(to).emit('newGroupMessage', {
+      io.to(to).emit('group-chat', {
         message,
         name: user.name,
         userId: socket.userId
@@ -159,17 +166,13 @@ io.on('connection', socket => {
     }
   })
 
-  // private chat
+  /* Private Chat */
   socket.on('private-chat', chatRoomId => {
     socket.join(chatRoomId)
-    console.log(`A user private-chat(joined) ${chatRoomId}`)
+    console.log(`A user joined a private-chat (event: 'private-chat') ${chatRoomId}`)
   })
 
-  socket.on('leave-room', chatRoomId => {
-    socket.leave(chatRoomId)
-    console.log(`A user leave-room(left)  ${chatRoomId}`)
-  })
-
+  /* Private message */
   socket.on('private-message', async ({ message, to }) => {
     // do not process a black message
     if (message.trim().length > 0) {

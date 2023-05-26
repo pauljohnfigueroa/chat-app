@@ -4,8 +4,7 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
-// import ChatRoom from './pages/xChatRoom'
-// import ChatUser from './pages/ChatUser'
+
 import { io } from 'socket.io-client'
 import makeToast from './Toaster'
 

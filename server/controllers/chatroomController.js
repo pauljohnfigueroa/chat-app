@@ -4,8 +4,7 @@ const ObjectId = mongoose.Types.ObjectId
 
 export const createChatRoom = async (req, res) => {
   try {
-    const { name } = req.body
-
+    const { name } = req.params
     // check if the email already exists
     const chatroomExists = await ChatRoom.findOne({ name })
     if (chatroomExists) {
@@ -34,5 +33,6 @@ export const getAllChatrooms = async (req, res) => {
 export const getChatRoom = async (req, res) => {
   const { chatRoomId } = req.params
   const chatroom = await ChatRoom.find({ _id: new ObjectId(chatRoomId) })
+  console.log('chatroom', chatroom)
   res.status(201).json(chatroom)
 }

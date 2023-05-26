@@ -21,7 +21,11 @@ const Sidebar = ({
           setMessages={setMessages}
         />
         {/* Chat rooms */}
-        <Chatrooms socket={socket} />
+        <Chatrooms
+          socket={socket}
+          setChatRoomId={setChatRoomId}
+          setIsMessageBoxOpen={setIsMessageBoxOpen}
+        />
       </div>
     </>
   )

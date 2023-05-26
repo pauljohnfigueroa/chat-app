@@ -7,10 +7,6 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
   const [userId, setUserId] = useState('')
   const [onlineUsers, setOnlineUsers] = useState([])
 
-  // const [chatRoomId, setChatRoomId] = useState('')
-  //console.log(users._id, userId)
-  // let navigate = useNavigate()
-
   const joinPrivateChatRoom = async (roomId, userId) => {
     const resp = await axios
       .post(
@@ -27,14 +23,11 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
       )
       .then(response => {
         setChatRoomId(response.data._id)
-        //navigate(`/chat/${roomId}/${userId}/${response.data._id}`)
         return response.data
       })
       .catch(error => {
         console.log(error.message)
       })
-
-    //console.log('resp', resp._id)
 
     if (socket) {
       socket.emit('private-chat', resp._id)
@@ -85,7 +78,7 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
 
   useEffect(() => {
     console.log('useEffect()')
-    // on login, notify others if online/ofline
+    // on login, notify others if online/offline
     if (socket) {
       socket.emit('online-status', {
         userId
@@ -129,12 +122,12 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
     if (socket) {
       socket.on('offline-broadcast', uid => {
         //console.log('offline-broadcast')
-        console.log('uid', uid)
-        console.log('onlineUsers', onlineUsers)
+        // console.log('uid', uid)
+        // console.log('onlineUsers', onlineUsers)
         const filtered = onlineUsers.filter(id => id !== uid)
-        console.log('filtered', filtered)
+        // console.log('filtered', filtered)
         setOnlineUsers(filtered)
-        console.log('onlineUsers2', onlineUsers)
+        // console.log('onlineUsers2', onlineUsers)
       })
     }
   }, [socket, onlineUsers])
@@ -172,7 +165,7 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
                   <div className="list-item" onClick={() => joinPrivateChatRoom(user._id, userId)}>
                     {user.name}
                   </div>
-                  <div className="message-notif-indicator">M</div>
+                  <div className="message-notif-indicator">&#128490;</div>
                   <div
                     className={
                       onlineUsers.includes(user._id)
@@ -180,7 +173,7 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
                         : 'user-status-indicator user-status-indicator-offline'
                     }
                   >
-                    O
+                    &#11044;
                   </div>
                 </div>
               )

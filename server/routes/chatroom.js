@@ -7,6 +7,7 @@ const router = express.Router()
 
 router.get('/', verifyToken, catchErrors(getAllChatrooms))
 router.get('/:chatRoomId', verifyToken, catchErrors(getChatRoom))
+// router.post('/:chatRoomId', verifyToken, catchErrors(getChatRoom))
 router.post('/', verifyToken, catchErrors(createChatRoom))
 
 export default router

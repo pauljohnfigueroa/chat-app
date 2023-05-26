@@ -129,11 +129,6 @@ io.on('connection', socket => {
     }
   })
 
-  // test
-  // socket.on('test', message => {
-  //   console.log(`socket.on('test') - OFFLINE: ${message}`)
-  // })
-
   // Group chat
   socket.on('joinRoom', (chatRoomId, cb) => {
     socket.join(chatRoomId)

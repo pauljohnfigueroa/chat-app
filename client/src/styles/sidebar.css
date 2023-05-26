@@ -33,19 +33,16 @@
   align-items: center;
   justify-content: center;
   text-align: right;
-  /* border: 1px dashed blue; */
   padding-right: 10px;
-  /* width: 20%; */
   border-radius: 50%;
-  /* background-color: rgb(89, 8, 194); */
 }
 
 .user-status-indicator-online {
-  color: rgb(4, 238, 31);
+  color: rgb(0, 179, 21);
 }
 
 .user-status-indicator-offline {
-  color: rgb(124, 124, 124);
+  color: #888;
 }
 
 .message-notif-indicator {
@@ -53,14 +50,13 @@
   align-items: center;
   justify-content: center;
   text-align: right;
-  /* border: 1px dashed blue; */
   padding-right: 10px;
   width: 20%;
+  color: #888;
 }
 
 .account-header {
   display: flex;
-  /* justify-content: center; */
   align-items: center;
   gap: 10px;
 }

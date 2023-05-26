@@ -47,7 +47,7 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
             },
             {
               headers: {
-                Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
+                Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
               }
             }
           )
@@ -68,7 +68,7 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
   }, [socket, messages, setMessages])
 
   useEffect(() => {
-    const token = localStorage.getItem('chatapp_token')
+    const token = sessionStorage.getItem('chatapp_token')
 
     // get own id
     let myId = ''
@@ -83,7 +83,7 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
     axios
       .get(`http://localhost:8000/chat/${chatRoomId}/${myId.id}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
+          Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
         }
       })
       .then(response => {
@@ -98,7 +98,7 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
     axios
       .get(`http://localhost:8000/messages/${chatRoomId}/${myId.id}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
+          Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
         }
       })
       .then(response => {

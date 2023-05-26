@@ -21,7 +21,7 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
+            Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
           }
         }
       )
@@ -44,7 +44,7 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
     await axios
       .get(`http://localhost:8000/chat/${roomId}/${userId}/${resp._id}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
+          Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
         }
       })
       .then(response => {
@@ -59,7 +59,7 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
     await axios
       .get('http://localhost:8000/users', {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
+          Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
         }
       })
       .then(response => {
@@ -72,7 +72,7 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
 
   useEffect(() => {
     getUsers()
-    const token = localStorage.getItem('chatapp_token')
+    const token = sessionStorage.getItem('chatapp_token')
 
     // get own id
     if (token) {
@@ -97,7 +97,7 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
       await axios
         .post(`http://localhost:8000/users/online`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
+            Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
           }
         })
         .then(response => {
@@ -133,10 +133,11 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
         console.log('onlineUsers', onlineUsers)
         const filtered = onlineUsers.filter(id => id !== uid)
         console.log('filtered', filtered)
-        setOnlineUsers([...filtered])
+        setOnlineUsers(filtered)
+        console.log('onlineUsers2', onlineUsers)
       })
     }
-  }, [socket])
+  }, [socket, onlineUsers])
 
   return (
     <>

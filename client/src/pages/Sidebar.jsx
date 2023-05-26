@@ -12,7 +12,7 @@ const Sidebar = ({ socket }) => {
     axios
       .get('http://localhost:8000/chatrooms', {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
+          Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
         }
       })
       .then(response => {
@@ -27,7 +27,7 @@ const Sidebar = ({ socket }) => {
     axios
       .get('http://localhost:8000/users', {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
+          Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
         }
       })
       .then(response => {
@@ -55,7 +55,7 @@ const Sidebar = ({ socket }) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
+            Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
           }
         }
       )

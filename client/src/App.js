@@ -13,11 +13,11 @@ function App() {
   const [socket, setSocket] = useState(null)
 
   const setupSocket = () => {
-    const token = localStorage.getItem('chatapp_token')
+    const token = sessionStorage.getItem('chatapp_token')
     if (token && !socket) {
       const newSocket = io('http://localhost:8000', {
         query: {
-          token: localStorage.getItem('chatapp_token')
+          token: sessionStorage.getItem('chatapp_token')
         },
         cors: {
           origin: 'http://localhost:3000',

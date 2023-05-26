@@ -13,7 +13,7 @@ const Chatrooms = ({ socket }) => {
     axios
       .get('http://localhost:8000/chatrooms', {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
+          Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
         }
       })
       .then(response => {
@@ -43,7 +43,7 @@ const Chatrooms = ({ socket }) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
+            Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
           }
         }
       )

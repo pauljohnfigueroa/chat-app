@@ -6,7 +6,7 @@ const IndexPage = props => {
 
   useEffect(() => {
     // check if user already logged in
-    const token = localStorage.getItem('chatapp_token')
+    const token = sessionStorage.getItem('chatapp_token')
     if (!token) {
       navigate('/login')
     } else {

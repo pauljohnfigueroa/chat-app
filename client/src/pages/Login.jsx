@@ -21,7 +21,8 @@ const LoginPage = ({ setupSocket }) => {
         //console.log(response.data)
         makeToast('success', response.data.message)
         // save to localStorage
-        localStorage.setItem('chatapp_token', response.data.token)
+        // localStorage.setItem('chatapp_token', response.data.token)
+        sessionStorage.setItem('chatapp_token', response.data.token)
         setupSocket()
         // redirect to dashboard
         navigate('/dashboard')

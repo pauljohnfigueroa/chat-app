@@ -104,7 +104,7 @@ io.on('connection', socket => {
     const userId = socket.userId
     try {
       const user = await User.findOneAndUpdate({ _id: userId }, { isOnline: false })
-      console.log(`socket.on('disconnect') - A user left the chat.`)
+      console.log(`socket.on('disconnect') - A user left the chat.`, userId)
     } catch (error) {
       console.log(error.message)
     }
@@ -123,16 +123,16 @@ io.on('connection', socket => {
     const userId = socket.userId
     try {
       const user = await User.findOneAndUpdate({ _id: userId }, { isOnline: false })
-      console.log('A user left the chat.')
+      console.log('A user left the chat.', userId)
     } catch (error) {
       console.log(error.message)
     }
   })
 
   // test
-  socket.on('test', message => {
-    console.log(`socket.on('test') - OFFLINE: ${message}`)
-  })
+  // socket.on('test', message => {
+  //   console.log(`socket.on('test') - OFFLINE: ${message}`)
+  // })
 
   // Group chat
   socket.on('joinRoom', (chatRoomId, cb) => {

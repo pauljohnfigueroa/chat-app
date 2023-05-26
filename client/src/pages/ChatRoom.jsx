@@ -28,7 +28,7 @@ const ChatRoom = ({ socket }) => {
   }
 
   useEffect(() => {
-    const token = localStorage.getItem('chatapp_token')
+    const token = sessionStorage.getItem('chatapp_token')
 
     // get own id
     if (token) {
@@ -50,7 +50,7 @@ const ChatRoom = ({ socket }) => {
     axios
       .get(`http://localhost:8000/chatrooms/${chatRoomId}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
+          Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
         }
       })
       .then(response => {
@@ -65,7 +65,7 @@ const ChatRoom = ({ socket }) => {
     axios
       .get(`http://localhost:8000/messages/${chatRoomId}/${userId}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('chatapp_token')}`
+          Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
         }
       })
       .then(response => {

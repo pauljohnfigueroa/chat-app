@@ -26,37 +26,37 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
 
   const handleLeaveRoom = () => {
     setIsMessageBoxOpen(false)
+    console.log('setUserOffline useEffect')
 
-    if (socket) {
-      socket.emit('leave-room', chatRoomId)
-      // Inform other that you are going offline
-      socket.emit('offline-status', {
-        userId
-      })
+    // use this in handle log out
+    // if (socket) {
+    //   socket.emit('leave-room', chatRoomId)
+    //   // Inform other that you are going offline
+    //   socket.emit('offline-status', {
+    //     userId
+    //   })
 
-      console.log('setUserOffline useEffect')
-
-      // Must be put in logout user logic
-      // Set isOnline to false in users collection
-      const setUserOffline = async () => {
-        await axios
-          .post(
-            `http://localhost:8000/users/offline`,
-            {
-              userId
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
-              }
-            }
-          )
-          .catch(error => {
-            console.log(error.message)
-          })
-      }
-      setUserOffline()
-    }
+    // Must be put in logout user logic
+    // Set isOnline to false in users collection
+    // const setUserOffline = async () => {
+    //   await axios
+    //     .post(
+    //       `http://localhost:8000/users/offline`,
+    //       {
+    //         userId
+    //       },
+    //       {
+    //         headers: {
+    //           Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
+    //         }
+    //       }
+    //     )
+    //     .catch(error => {
+    //       console.log(error.message)
+    //     })
+    // }
+    // setUserOffline()
+    // }
   }
 
   useEffect(() => {

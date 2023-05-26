@@ -26,7 +26,7 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
 
   const handleLeaveRoom = () => {
     setIsMessageBoxOpen(false)
-    console.log('setUserOffline useEffect')
+    // console.log('setUserOffline useEffect')
 
     // use this in handle log out
     if (socket) {

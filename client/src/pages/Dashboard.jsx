@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import MessageBox from '../pages/MessageBox'
+import MessageBoxGroup from '../pages/MessageBoxGroup'
+
 import Sidebar from '../components/Sidebar'
 
 const DashboardPage = ({ socket, setMessages }) => {
   const [isMessageBoxOpen, setIsMessageBoxOpen] = useState(false)
+  const [isMessageBoxGroupOpen, setIsMessageBoxGroupOpen] = useState(false)
   const [chatRoomId, setChatRoomId] = useState(null)
   const navigate = useNavigate()
 
@@ -26,6 +29,7 @@ const DashboardPage = ({ socket, setMessages }) => {
             setChatRoomId={setChatRoomId}
             setMessages={setMessages}
             setIsMessageBoxOpen={setIsMessageBoxOpen}
+            setIsMessageBoxGroupOpen={setIsMessageBoxGroupOpen}
             socket={socket}
           />
         </div>
@@ -34,6 +38,13 @@ const DashboardPage = ({ socket, setMessages }) => {
           {isMessageBoxOpen && (
             <MessageBox
               setIsMessageBoxOpen={setIsMessageBoxOpen}
+              chatRoomId={chatRoomId}
+              socket={socket}
+            />
+          )}
+          {isMessageBoxGroupOpen && (
+            <MessageBoxGroup
+              setIsMessageBoxGroupOpen={setIsMessageBoxGroupOpen}
               chatRoomId={chatRoomId}
               socket={socket}
             />

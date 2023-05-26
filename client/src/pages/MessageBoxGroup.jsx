@@ -1,52 +1,85 @@
 import { useEffect, useRef, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+// import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import makeToast from '../Toaster'
 
-const ChatRoom = ({ socket }) => {
-  const [messages, setMessages] = useState([])
-  const [chatRoomName, setChatRoomName] = useState('')
-  const [userId, setUserId] = useState('')
+const ChatGroup = ({ socket, chatRoomId, setIsMessageBoxGroupOpen }) => {
+  //const { chatRoomId } = useParams() // chatroom id
 
-  const { chatRoomId } = useParams()
+  const [messages, setMessages] = useState([])
+  const [chatName, setChatName] = useState('')
+  const [userId, setUserId] = useState('')
   const messageRef = useRef()
-  const navigate = useNavigate()
+
+  // const navigate = useNavigate()
 
   const sendMessage = () => {
     if (socket) {
       socket.emit('chatroomMessage', {
-        chatRoomId,
-        message: messageRef.current.value
+        message: messageRef.current.value,
+        to: chatRoomId
       })
+      // clear the message input
       messageRef.current.value = ''
     }
   }
 
   const handleLeaveRoom = () => {
-    socket.emit('leave-room', { chatRoomId })
-    navigate('/dashboard')
+    setIsMessageBoxGroupOpen(false)
+    // console.log('setUserOffline useEffect')
+
+    // use this in handle log out
+    if (socket) {
+      socket.emit('leave-room', chatRoomId)
+      // Inform other that you are going offline
+      socket.emit('offline-status', {
+        userId
+      })
+
+      // Must be put in logout user logic
+      // Set isOnline to false in users collection
+      // const setUserOffline = async () => {
+      //   await axios
+      //     .post(
+      //       `http://localhost:8000/users/offline`,
+      //       {
+      //         userId
+      //       },
+      //       {
+      //         headers: {
+      //           Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
+      //         }
+      //       }
+      //     )
+      //     .catch(error => {
+      //       console.log(error.message)
+      //     })
+      // }
+      // setUserOffline()
+    }
   }
+
+  useEffect(() => {
+    // new message
+    if (socket) {
+      socket.on('newGroupMessage', message => setMessages([...messages, message]))
+    }
+    // eslint-disable-next-line
+  }, [socket, messages, setMessages])
 
   useEffect(() => {
     const token = sessionStorage.getItem('chatapp_token')
 
     // get own id
+    let myId = ''
+
     if (token) {
       const payload = JSON.parse(window.atob(token.split('.')[1]))
+      myId = payload
       setUserId(payload.id)
     }
-    // new messages
-    if (socket) {
-      socket.on('newGroupMessage', message => {
-        const newMessages = [...messages, message]
-        setMessages(newMessages)
-      })
-    }
-    // eslint-disable-next-line
-  }, [messages])
 
-  useEffect(() => {
-    // get chatroom name
+    // get chat name
     axios
       .get(`http://localhost:8000/chatrooms/${chatRoomId}`, {
         headers: {
@@ -54,16 +87,16 @@ const ChatRoom = ({ socket }) => {
         }
       })
       .then(response => {
-        setChatRoomName(response.data)
+        setChatName(response.data)
       })
-      .catch(err => {
-        if (err && err.response && err.response.data && err.response.data.message)
-          makeToast('error', err.response.data.message)
+      .catch(error => {
+        if (error && error.response && error.response.data && error.response.data.message)
+          makeToast('error', error.response.data.message)
       })
 
     // fetch messages history
     axios
-      .get(`http://localhost:8000/messages/${chatRoomId}/${userId}`, {
+      .get(`http://localhost:8000/messages/${chatRoomId}/${myId.id}`, {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
         }
@@ -76,27 +109,28 @@ const ChatRoom = ({ socket }) => {
           makeToast('error', error.response.data.message)
       })
 
-    if (socket) {
-      socket.emit('group-chat', chatRoomId, message => message)
-    }
-
-    return () => {
-      if (socket) {
-        socket.emit('leaveRoom', { chatRoomId })
-      }
-    }
     //eslint-disable-next-line
   }, [])
 
+  // useState(() => {
+  //   if (socket) {
+  //     socket.emit('private-chat', chatRoomId)
+  //   }
+  //   // eslint-disable-next-line
+  // }, [])
+
   return (
-    <div className="chatroomPage">
-      <div className="chatroom-section">
-        <div className="">
-          <div className="card-header">{chatRoomName && chatRoomName[0].name}</div>
+    <div className="main-content">
+      <div className="message-box">
+        <div className="message-box-header-container">
+          <div className="message-box-header">
+            <h3 className="message-box-header-text">{chatName && chatName[0].name}</h3>
+          </div>
           <button className="leave-room-button" onClick={handleLeaveRoom}>
             Leave
           </button>
         </div>
+
         <div className="message-box-content">
           {messages.map((message, idx) => (
             <div
@@ -128,4 +162,4 @@ const ChatRoom = ({ socket }) => {
   )
 }
 
-export default ChatRoom
+export default ChatGroup

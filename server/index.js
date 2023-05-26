@@ -130,10 +130,8 @@ io.on('connection', socket => {
   })
 
   // Group chat
-  socket.on('joinRoom', (chatRoomId, cb) => {
+  socket.on('group-chat', chatRoomId => {
     socket.join(chatRoomId)
-    cb(`Joined ${chatRoomId}`)
-
     console.log(`A user joined ${chatRoomId}`)
   })
 
@@ -142,16 +140,16 @@ io.on('connection', socket => {
     console.log(`A user left ${chatRoomId}`)
   })
 
-  socket.on('chatroomMessage', async ({ chatRoomId, message }) => {
+  socket.on('chatroomMessage', async ({ message, to }) => {
     if (message.trim().length > 0) {
       const user = await User.findOne({ _id: socket.userId })
       const newMessage = new Message({
-        chatroom: chatRoomId,
+        chatroom: to,
         user: socket.userId,
         message
       })
 
-      io.to(chatRoomId).emit('newGroupMessage', {
+      io.to(to).emit('newGroupMessage', {
         message,
         name: user.name,
         userId: socket.userId

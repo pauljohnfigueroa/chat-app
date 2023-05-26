@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import makeToast from '../Toaster'
 
-const Chatrooms = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
+const Chatrooms = ({ socket, setChatRoomId, setIsMessageBoxGroupOpen }) => {
   const [chatrooms, setChatrooms] = useState([])
   const chatroomNameRef = useRef()
 
-  const navigate = useNavigate()
+  //const navigate = useNavigate()
 
   const getChatRooms = () => {
     axios
@@ -24,11 +24,12 @@ const Chatrooms = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
       })
   }
 
-  const createGroupChatRoom = room => {
-    navigate(`/chatrooms/${room}`)
-  }
+  // const createGroupChatRoom = room => {
+  //   navigate(`/chatrooms/${room}`)
+  // }
 
   const joinChatRoom = async roomId => {
+    console.log('joinChatRoom roomId', roomId)
     const resp = await axios
       .get(`http://localhost:8000/chatrooms/${roomId}`, {
         headers: {
@@ -36,12 +37,13 @@ const Chatrooms = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
         }
       })
       .then(response => {
+        console.log('response', response)
         setChatRoomId(response.data[0]._id)
         console.log(response.data)
         return response.data
       })
       .catch(error => {
-        console.log(error.message)
+        //console.log(error.message)
       })
 
     if (socket) {
@@ -56,7 +58,7 @@ const Chatrooms = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
         }
       })
       .then(response => {
-        setIsMessageBoxOpen(true)
+        setIsMessageBoxGroupOpen(true)
       })
       .catch(error => {
         console.log(error.message)
@@ -87,10 +89,11 @@ const Chatrooms = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
         getChatRooms()
         chatroomNameRef.current.value = ''
       })
-      .catch(err => {
-        // console.log(err);
-        if (err && err.response && err.response.data && err.response.data.message)
-          makeToast('error', err.response.data.message)
+      .catch(error => {
+        console.log(error.message)
+        if (error && error.response && error.response.data && error.response.data.message)
+          console.log('ERROR')
+        //makeToast('error', error.response.data.message)
       })
   }
 

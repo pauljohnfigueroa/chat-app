@@ -35,40 +35,40 @@ const LoginPage = ({ setupSocket }) => {
   return (
     <div className="form-outer-container">
       <div className="form-container">
-        <div className="cardHeader">ChatApp Login</div>
-        <div className="cardBody">
-          <div className="inputGroup">
-            <form method="GET">
-              <div className="form-row">
-                <label className="form-item-label" htmlFor="email">
-                  Email
-                </label>
-                <input
-                  className="form-item  form-input"
-                  type="email"
-                  name="email"
-                  id="email"
-                  ref={emailRef}
-                />
-              </div>
-              <div className="form-row">
-                <label className="form-item-label" htmlFor="password">
-                  Password
-                </label>
-                <input
-                  className="form-item  form-input"
-                  type="password"
-                  name="password"
-                  id="password"
-                  ref={passwordRef}
-                />
-              </div>
-              <div className="form-row form-button">
-                <button onClick={loginUser}>Sign In</button>
-              </div>
-            </form>
+        <div className="form-header">ChatApp</div>
+
+        <form>
+          <div className="form-row">
+            <label className="form-item-label" htmlFor="email">
+              Email
+            </label>
+            <input
+              className="form-item  form-input"
+              type="email"
+              name="email"
+              id="email"
+              ref={emailRef}
+            />
           </div>
-        </div>
+          <div className="form-row">
+            <label className="form-item-label" htmlFor="password">
+              Password
+            </label>
+            <input
+              className="form-item  form-input"
+              type="password"
+              name="password"
+              id="password"
+              ref={passwordRef}
+            />
+          </div>
+          <div className="form-row form-button">
+            <button onClick={loginUser}>Sign In</button>
+          </div>
+        </form>
+        <a href="/register" className="register-link">
+          Don't have an account? Register here.
+        </a>
       </div>
     </div>
   )

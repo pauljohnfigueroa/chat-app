@@ -26,9 +26,9 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
     if (socket) {
       socket.emit('leave-room', chatRoomId)
       // Inform other that you are going offline
-      socket.emit('offline-status', {
-        userId
-      })
+      // socket.emit('offline-status', {
+      //   userId
+      // })
     }
   }
 

@@ -32,30 +32,9 @@ const ChatGroup = ({ socket, chatRoomId, setIsMessageBoxGroupOpen }) => {
     if (socket) {
       socket.emit('leave-room', chatRoomId)
       // Inform other that you are going offline
-      socket.emit('offline-status', {
-        userId
-      })
-
-      // Must be put in logout user logic
-      // Set isOnline to false in users collection
-      // const setUserOffline = async () => {
-      //   await axios
-      //     .post(
-      //       `http://localhost:8000/users/offline`,
-      //       {
-      //         userId
-      //       },
-      //       {
-      //         headers: {
-      //           Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
-      //         }
-      //       }
-      //     )
-      //     .catch(error => {
-      //       console.log(error.message)
-      //     })
-      // }
-      // setUserOffline()
+      // socket.emit('offline-status', {
+      //   userId
+      // })
     }
   }
 

@@ -1,11 +1,21 @@
-import { useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Outlet, useNavigate } from 'react-router-dom'
 import MessageBox from '../pages/MessageBox'
 import Sidebar from '../components/Sidebar'
 
 const DashboardPage = ({ socket, setMessages }) => {
   const [isMessageBoxOpen, setIsMessageBoxOpen] = useState(false)
   const [chatRoomId, setChatRoomId] = useState(null)
+  const navigate = useNavigate()
+
+  // Repeated code, put in a separate auth method
+  useEffect(() => {
+    // check if user already logged in
+    const token = sessionStorage.getItem('chatapp_token')
+    if (!token) {
+      navigate('/login')
+    }
+  }, [navigate])
 
   return (
     <>

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 const IndexPage = props => {
   const navigate = useNavigate()
 
+  // Repeated code, put in a separate auth method
   useEffect(() => {
     // check if user already logged in
     const token = sessionStorage.getItem('chatapp_token')

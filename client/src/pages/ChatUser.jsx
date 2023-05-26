@@ -29,6 +29,15 @@ const Chat = ({ socket }) => {
     navigate('/dashboard')
   }
 
+  // Repeated code, put in a separate auth method
+  useEffect(() => {
+    // check if user already logged in
+    const token = sessionStorage.getItem('chatapp_token')
+    if (!token) {
+      navigate('/login')
+    }
+  }, [navigate])
+
   useEffect(() => {
     // new message
     if (socket) {

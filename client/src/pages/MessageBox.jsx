@@ -13,24 +13,28 @@ const modules = {
   toolbar: [
     [{ header: [1, 2, false] }],
     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-    [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+    // [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+    [{ list: 'ordered' }, { list: 'bullet' }],
     ['image']
-  ]
+  ],
+  clipboard: {
+    matchVisual: false
+  }
 }
 
-const formats = [
-  'header',
-  'bold',
-  'italic',
-  'underline',
-  'strike',
-  'blockquote',
-  'list',
-  'bullet',
-  'indent',
-  'link',
-  'image'
-]
+// const formats = [
+//   'header',
+//   'bold',
+//   'italic',
+//   'underline',
+//   'strike',
+//   'blockquote',
+//   'list',
+//   'bullet',
+//   'indent',
+//   'link',
+//   'image'
+// ]
 
 const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
   const [messages, setMessages] = useState([])
@@ -167,7 +171,10 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
         </div>
 
         <div className="message-box-actions">
-          <button className="select-emoji" onClick={() => setIsPickerVisible(!isPickerVisible)}>
+          <button
+            className="emoji-picker-button"
+            onClick={() => setIsPickerVisible(!isPickerVisible)}
+          >
             😀
           </button>
           <div className={isPickerVisible ? 'picker-visible' : 'picker-hidden'}>
@@ -192,7 +199,7 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
               className="react-quill"
               theme="snow"
               modules={modules}
-              formats={formats}
+              // formats={formats}
               value={quillValue}
               ref={messageRef}
               onChange={rteChange}

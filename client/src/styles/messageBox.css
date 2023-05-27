@@ -17,12 +17,11 @@
 
 .message-box-header {
   background: #590261;
-
   color: azure;
   font-size: 1.1rem;
   font-weight: bold;
   width: 100%;
-  height: 40px;
+  height: 50px;
   display: flex;
   align-items: center;
 }
@@ -67,7 +66,7 @@
   color: rgb(255, 255, 255);
   font-weight: bold;
   border: none;
-  height: 40px;
+  height: 50px;
   min-width: 10%;
   padding: 8px;
   cursor: pointer;
@@ -84,7 +83,7 @@
   font-weight: bold;
   border: none;
   width: 20%;
-  height: 42px;
+  height: 140px;
   border-radius: 0 4px 4px 0;
   min-width: 60px;
   padding: 8px;
@@ -107,6 +106,7 @@
 .my-message {
   margin-bottom: 0.25rem;
   text-align: right;
+  min-height: 50px;
 }
 
 .otherMessage {
@@ -147,26 +147,32 @@
   position: absolute;
   left: 40px;
   bottom: 50px;
+  z-index: 99;
 }
 
 .picker-hidden {
   visibility: hidden;
   height: 0;
+  width: 0;
   position: absolute;
   left: 40px;
-  bottom: 60vh;
+  bottom: 80vh;
 }
 
-.select-emoji {
-  height: 40px;
+.emoji-picker-button {
+  background-color: rgb(167, 76, 252);
+  font-size: large;
   width: 50px;
   border: none;
   border-radius: 4px 0 0 4px;
+  height: 140px;
+  cursor: pointer;
 }
 
 .react-quill {
   /* border: 1px dashed green; */
-  width: 100%;
+  min-width: 800px;
+  max-width: 800px;
   height: 100px;
   /* overflow-y: scroll; */
 }

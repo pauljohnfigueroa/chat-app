@@ -3,6 +3,7 @@
   position: relative;
 }
 .app-name {
+  height: 50px;
   font-size: 1.8rem;
   padding-left: 10px;
   font-weight: bold;

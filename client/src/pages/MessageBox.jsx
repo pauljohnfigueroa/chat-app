@@ -2,79 +2,48 @@ import { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import makeToast from '../Toaster'
 
-// import data from '@emoji-mart/data'
-// import Picker from '@emoji-mart/react'
-
-import ReactQuill from 'react-quill'
-import 'react-quill/dist/quill.snow.css'
-// import QuillEmoji from 'quill-emoji'
-import 'quill-emoji/dist/quill-emoji.css'
+// import ReactQuill from 'react-quill'
+// import 'react-quill/dist/quill.snow.css'
+// import 'quill-emoji/dist/quill-emoji.css'
 
 import parse from 'html-react-parser'
 
-// Quill.register(
-//   {
-//     'formats/emoji': QuillEmoji.QuillEmoji.Blot,
-//     'modules/emoji-toolbar': QuillEmoji.ToolbarEmoji,
-//     'modules/emoji-textarea': QuillEmoji.TextAreaEmoji,
-//     'modules/emoji-shortname': QuillEmoji.ShortNameEmoji
-//   },
-//   true
-// )
+import Quill from '../components/Quill'
 
-const modules = {
-  toolbar: [
-    ['emoji'],
-    [{ header: [1, 2, false] }],
-    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-    // [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-    [{ list: 'ordered' }, { list: 'bullet' }],
-    ['clean'],
-    ['image']
-  ],
-  'emoji-toolbar': true,
-  'emoji-textarea': true,
-  'emoji-shortname': true,
-  clipboard: {
-    matchVisual: false
-  }
-}
-
-// const formats = [
-//   'header',
-//   'bold',
-//   'italic',
-//   'underline',
-//   'strike',
-//   'blockquote',
-//   'list',
-//   'bullet',
-//   'indent',
-//   'link',
-//   'image'
-// ]
+// const modules = {
+//   toolbar: [
+//     ['emoji'],
+//     [{ header: [1, 2, false] }],
+//     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+//     // [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+//     [{ list: 'ordered' }, { list: 'bullet' }],
+//     ['clean'],
+//     ['image']
+//   ],
+//   'emoji-toolbar': true,
+//   'emoji-textarea': true,
+//   'emoji-shortname': true,
+//   clipboard: {
+//     matchVisual: false
+//   }
+// }
 
 const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
   const [messages, setMessages] = useState([])
   const [chatName, setChatName] = useState('')
   const [userId, setUserId] = useState('')
-  // const [isPickerVisible, setIsPickerVisible] = useState(false)
   const [quillValue, setQuillValue] = useState('')
 
   const messageRef = useRef('')
   const messageEndRef = useRef(null)
 
   const sendMessage = () => {
-    // console.log(messageRef.current.value)
-    console.log(quillValue)
     if (socket) {
       socket.emit('private-message', {
-        // message: messageRef.current.value,
         message: quillValue,
         to: chatRoomId
       })
       // clear the message input
-      // messageRef.current.value = ''
       setQuillValue('')
     }
   }
@@ -89,12 +58,10 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
     }
   }
 
-  const rteChange = (content, delta, source, editor) => {
-    console.log(editor.getHTML()) // rich text
-    setQuillValue(editor.getHTML())
-    // console.log(editor.getText()) // plain text
-    // console.log(editor.getLength()) // number of characters
-  }
+  // const rteChange = (content, delta, source, editor) => {
+  //   console.log(editor.getHTML()) // rich text
+  //   setQuillValue(editor.getHTML())
+  // }
 
   useEffect(() => {
     // new message
@@ -195,31 +162,8 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
         </div>
 
         <div className="message-box-actions">
-          {/* <button
-            className="emoji-picker-button"
-            onClick={() => setIsPickerVisible(!isPickerVisible)}
-          >
-            😀
-          </button> */}
-          {/* <div className={isPickerVisible ? 'picker-visible' : 'picker-hidden'}> */}
-          {/* <Picker
-              data={data}
-              onEmojiSelect={e => {
-                setIsPickerVisible(!isPickerVisible)
-                // messageRef.current.value = `${messageRef.current.value}${e.native}`
-                setQuillValue(`${messageRef.current.value}${e.native}`)
-              }}
-            /> */}
-          {/* </div> */}
-          {/* <input
-            className="message-input"
-            type="text"
-            name="message"
-            placeholder="Type your message here."
-            ref={messageRef}
-          /> */}
           <div className="react-quill-container">
-            <ReactQuill
+            {/* <ReactQuill
               className="react-quill"
               theme="snow"
               modules={modules}
@@ -228,7 +172,8 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
               ref={messageRef}
               onChange={rteChange}
               placeholder="Compose a message"
-            />
+            /> */}
+            <Quill setQuillValue={setQuillValue} quillValue={quillValue} messageRef={messageRef} />
           </div>
           <button className="send-message-button" onClick={sendMessage}>
             Send

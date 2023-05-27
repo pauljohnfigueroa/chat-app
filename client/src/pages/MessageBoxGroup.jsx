@@ -2,12 +2,17 @@ import { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import makeToast from '../Toaster'
 
+import parse from 'html-react-parser'
+
+import Quill from '../components/Quill'
+
 const ChatGroup = ({ socket, chatRoomId, setIsMessageBoxGroupOpen }) => {
   //const { chatRoomId } = useParams() // chatroom id
 
   const [messages, setMessages] = useState([])
   const [chatName, setChatName] = useState('')
   const [userId, setUserId] = useState('')
+  const [quillValue, setQuillValue] = useState('')
 
   const messageRef = useRef()
   const messageEndRef = useRef(null)
@@ -15,11 +20,12 @@ const ChatGroup = ({ socket, chatRoomId, setIsMessageBoxGroupOpen }) => {
   const sendMessage = () => {
     if (socket) {
       socket.emit('group-message', {
-        message: messageRef.current.value,
+        message: quillValue,
         to: chatRoomId
       })
       // clear the message input
-      messageRef.current.value = ''
+      // messageRef.current.value = ''
+      setQuillValue('')
     }
   }
 
@@ -117,7 +123,7 @@ const ChatGroup = ({ socket, chatRoomId, setIsMessageBoxGroupOpen }) => {
                 <div className={userId === message.userId ? 'ownMessage' : 'otherMessage'}>
                   {userId === message.userId ? 'You' : message.name}
                 </div>
-                <div className="message-text">{message.message}</div>
+                <div className="message-text">{parse(message.message)}</div>
               </div>
             </div>
           ))}
@@ -125,13 +131,14 @@ const ChatGroup = ({ socket, chatRoomId, setIsMessageBoxGroupOpen }) => {
           <div ref={messageEndRef} />
         </div>
         <div className="message-box-actions">
-          <input
+          {/* <input
             className="message-input"
             type="text"
             name="message"
             placeholder="Type your message here."
             ref={messageRef}
-          />
+          /> */}
+          <Quill setQuillValue={setQuillValue} quillValue={quillValue} messageRef={messageRef} />
           <button className="send-message-button" onClick={sendMessage}>
             Send
           </button>

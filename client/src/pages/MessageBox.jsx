@@ -2,31 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import makeToast from '../Toaster'
 
-// import ReactQuill from 'react-quill'
-// import 'react-quill/dist/quill.snow.css'
-// import 'quill-emoji/dist/quill-emoji.css'
-
 import parse from 'html-react-parser'
 
 import ReactQuillRte from '../components/ReactQuillRte'
-
-// const modules = {
-//   toolbar: [
-//     ['emoji'],
-//     [{ header: [1, 2, false] }],
-//     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-//     // [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-//     [{ list: 'ordered' }, { list: 'bullet' }],
-//     ['clean'],
-//     ['image']
-//   ],
-//   'emoji-toolbar': true,
-//   'emoji-textarea': true,
-//   'emoji-shortname': true,
-//   clipboard: {
-//     matchVisual: false
-//   }
-// }
 
 const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
   const [messages, setMessages] = useState([])
@@ -57,11 +35,6 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
       socket.emit('leave-room', chatRoomId)
     }
   }
-
-  // const rteChange = (content, delta, source, editor) => {
-  //   console.log(editor.getHTML()) // rich text
-  //   setQuillValue(editor.getHTML())
-  // }
 
   useEffect(() => {
     // new message

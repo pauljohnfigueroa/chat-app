@@ -26,9 +26,9 @@ const RegisterPage = () => {
     const name = nameRef.current.value
     const email = emailRef.current.value
     const password = passwordRef.current.value
-    //const avatar = avatarRef.current.value
+    // const avatar = avatarRef.current.value
 
-    // upload avatar to get path
+    // upload avatar
     const formData = new FormData()
     formData.append('avatar', avatar)
 
@@ -38,14 +38,16 @@ const RegisterPage = () => {
       .catch(error => {
         makeToast('error', error.message)
       })
+    // the URL of the uploaded avatar image
+    const avatarUrl = `http://localhost:8000/${uploadedFile.file.destination}/${uploadedFile.file.filename}`
 
-    // Register user in the database
+    // Register user in the database and save the URL of the uploaded image
     axios
       .post('http://localhost:8000/users/register', {
         name,
         email,
         password,
-        avatar: `http://localhost:8000/${uploadedFile.file.destination}/${uploadedFile.file.filename}`
+        avatar: avatarUrl
       })
       .then(response => {
         console.log(response.data)

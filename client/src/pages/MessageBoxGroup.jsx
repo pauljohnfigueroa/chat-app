@@ -7,8 +7,6 @@ import parse from 'html-react-parser'
 import ReactQuillRte from '../components/ReactQuillRte'
 
 const ChatGroup = ({ socket, chatRoomId, setIsMessageBoxGroupOpen }) => {
-  //const { chatRoomId } = useParams() // chatroom id
-
   const [messages, setMessages] = useState([])
   const [chatName, setChatName] = useState('')
   const [userId, setUserId] = useState('')
@@ -24,7 +22,6 @@ const ChatGroup = ({ socket, chatRoomId, setIsMessageBoxGroupOpen }) => {
         to: chatRoomId
       })
       // clear the message input
-      // messageRef.current.value = ''
       setQuillValue('')
     }
   }
@@ -92,7 +89,7 @@ const ChatGroup = ({ socket, chatRoomId, setIsMessageBoxGroupOpen }) => {
     //eslint-disable-next-line
   }, [])
 
-  // show latest message
+  // scroll to show the latest message
   useEffect(() => {
     messageEndRef?.current.scrollIntoView()
   }, [messages])
@@ -131,13 +128,6 @@ const ChatGroup = ({ socket, chatRoomId, setIsMessageBoxGroupOpen }) => {
           <div ref={messageEndRef} />
         </div>
         <div className="message-box-actions">
-          {/* <input
-            className="message-input"
-            type="text"
-            name="message"
-            placeholder="Type your message here."
-            ref={messageRef}
-          /> */}
           <ReactQuillRte
             setQuillValue={setQuillValue}
             quillValue={quillValue}

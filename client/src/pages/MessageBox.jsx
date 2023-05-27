@@ -2,21 +2,39 @@ import { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import makeToast from '../Toaster'
 
-import data from '@emoji-mart/data'
-import Picker from '@emoji-mart/react'
+// import data from '@emoji-mart/data'
+// import Picker from '@emoji-mart/react'
 
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
+// import QuillEmoji from 'quill-emoji'
+import 'quill-emoji/dist/quill-emoji.css'
+
 import parse from 'html-react-parser'
+
+// Quill.register(
+//   {
+//     'formats/emoji': QuillEmoji.QuillEmoji.Blot,
+//     'modules/emoji-toolbar': QuillEmoji.ToolbarEmoji,
+//     'modules/emoji-textarea': QuillEmoji.TextAreaEmoji,
+//     'modules/emoji-shortname': QuillEmoji.ShortNameEmoji
+//   },
+//   true
+// )
 
 const modules = {
   toolbar: [
+    ['emoji'],
     [{ header: [1, 2, false] }],
     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
     // [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
     [{ list: 'ordered' }, { list: 'bullet' }],
+    ['clean'],
     ['image']
   ],
+  'emoji-toolbar': true,
+  'emoji-textarea': true,
+  'emoji-shortname': true,
   clipboard: {
     matchVisual: false
   }
@@ -40,7 +58,7 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
   const [messages, setMessages] = useState([])
   const [chatName, setChatName] = useState('')
   const [userId, setUserId] = useState('')
-  const [isPickerVisible, setIsPickerVisible] = useState(false)
+  // const [isPickerVisible, setIsPickerVisible] = useState(false)
   const [quillValue, setQuillValue] = useState('')
 
   const messageRef = useRef('')
@@ -162,7 +180,13 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
                 <div className={userId === message.userId ? 'ownMessage' : 'otherMessage'}>
                   {userId === message.userId ? 'You' : message.name}
                 </div>
-                <div className="message-text">{parse(message.message)}</div>
+                <div
+                  className={
+                    userId === message.userId ? 'my-message-text message-text' : 'message-text'
+                  }
+                >
+                  {parse(message.message)}
+                </div>
               </div>
             </div>
           ))}
@@ -171,22 +195,22 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
         </div>
 
         <div className="message-box-actions">
-          <button
+          {/* <button
             className="emoji-picker-button"
             onClick={() => setIsPickerVisible(!isPickerVisible)}
           >
             😀
-          </button>
-          <div className={isPickerVisible ? 'picker-visible' : 'picker-hidden'}>
-            <Picker
+          </button> */}
+          {/* <div className={isPickerVisible ? 'picker-visible' : 'picker-hidden'}> */}
+          {/* <Picker
               data={data}
               onEmojiSelect={e => {
                 setIsPickerVisible(!isPickerVisible)
                 // messageRef.current.value = `${messageRef.current.value}${e.native}`
                 setQuillValue(`${messageRef.current.value}${e.native}`)
               }}
-            />
-          </div>
+            /> */}
+          {/* </div> */}
           {/* <input
             className="message-input"
             type="text"
@@ -203,6 +227,7 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
               value={quillValue}
               ref={messageRef}
               onChange={rteChange}
+              placeholder="Compose a message"
             />
           </div>
           <button className="send-message-button" onClick={sendMessage}>

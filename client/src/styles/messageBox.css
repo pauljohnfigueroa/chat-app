@@ -109,6 +109,10 @@
   min-height: 50px;
 }
 
+.my-message-text {
+  text-align: left;
+}
+
 .otherMessage {
   color: #811a00;
   font-size: 0.8rem;

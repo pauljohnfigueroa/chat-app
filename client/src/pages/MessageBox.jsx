@@ -8,7 +8,7 @@ import makeToast from '../Toaster'
 
 import parse from 'html-react-parser'
 
-import Quill from '../components/Quill'
+import ReactQuillRte from '../components/ReactQuillRte'
 
 // const modules = {
 //   toolbar: [
@@ -173,7 +173,11 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
               onChange={rteChange}
               placeholder="Compose a message"
             /> */}
-            <Quill setQuillValue={setQuillValue} quillValue={quillValue} messageRef={messageRef} />
+            <ReactQuillRte
+              setQuillValue={setQuillValue}
+              quillValue={quillValue}
+              messageRef={messageRef}
+            />
           </div>
           <button className="send-message-button" onClick={sendMessage}>
             Send

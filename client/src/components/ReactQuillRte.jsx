@@ -1,6 +1,18 @@
-import ReactQuill from 'react-quill'
+import ReactQuill, { Quill } from 'react-quill'
+import quillEmoji from 'quill-emoji'
 import 'react-quill/dist/quill.snow.css'
 import 'quill-emoji/dist/quill-emoji.css'
+
+// Required by Edge
+Quill.register(
+  {
+    'formats/emoji': quillEmoji.EmojiBlot,
+    'modules/emoji-toolbar': quillEmoji.ToolbarEmoji,
+    'modules/emoji-textarea': quillEmoji.TextAreaEmoji,
+    'modules/emoji-shortname': quillEmoji.ShortNameEmoji
+  },
+  true
+)
 
 const modules = {
   toolbar: [
@@ -12,7 +24,7 @@ const modules = {
     ['clean'],
     ['image']
   ],
-  'emoji-toolbar': true,
+  //   'emoji-toolbar': true,
   'emoji-textarea': true,
   'emoji-shortname': true,
   clipboard: {
@@ -20,7 +32,7 @@ const modules = {
   }
 }
 
-const Quill = ({ setQuillValue, quillValue, messageRef }) => {
+const ReactQuillRte = ({ setQuillValue, quillValue, messageRef }) => {
   const rteChange = (content, delta, source, editor) => {
     console.log(editor.getHTML()) // rich text
     setQuillValue(editor.getHTML())
@@ -35,9 +47,8 @@ const Quill = ({ setQuillValue, quillValue, messageRef }) => {
       value={quillValue}
       ref={messageRef}
       onChange={rteChange}
-      placeholder="Compose a message"
     />
   )
 }
 
-export default Quill
+export default ReactQuillRte

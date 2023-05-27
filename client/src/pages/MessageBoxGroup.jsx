@@ -4,7 +4,7 @@ import makeToast from '../Toaster'
 
 import parse from 'html-react-parser'
 
-import Quill from '../components/Quill'
+import ReactQuillRte from '../components/ReactQuillRte'
 
 const ChatGroup = ({ socket, chatRoomId, setIsMessageBoxGroupOpen }) => {
   //const { chatRoomId } = useParams() // chatroom id
@@ -138,7 +138,11 @@ const ChatGroup = ({ socket, chatRoomId, setIsMessageBoxGroupOpen }) => {
             placeholder="Type your message here."
             ref={messageRef}
           /> */}
-          <Quill setQuillValue={setQuillValue} quillValue={quillValue} messageRef={messageRef} />
+          <ReactQuillRte
+            setQuillValue={setQuillValue}
+            quillValue={quillValue}
+            messageRef={messageRef}
+          />
           <button className="send-message-button" onClick={sendMessage}>
             Send
           </button>

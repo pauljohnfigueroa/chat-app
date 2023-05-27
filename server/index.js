@@ -4,6 +4,9 @@ import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import cors from 'cors'
 import jwt from 'jsonwebtoken'
+import multer from 'multer'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import { Server } from 'socket.io'
 
 import User from './models/User.js'
@@ -11,6 +14,9 @@ import Message from './models/Message.js'
 
 dotenv.config()
 const app = express()
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 import corsOptions from './config/corsOptions.js'
 
@@ -22,12 +28,41 @@ import messageRoutes from './routes/messages.js'
 
 /* Middleware */
 app.use(express.json())
+
 //app.use(express.urlencoded({ extended: true }))
 app.use(bodyParser.json({ limit: '30mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }))
+
+// Public files
+app.use(express.static('public'))
+app.use('/uploads', express.static('uploads'))
+
 // Cross Origin Resource Sharing
 // you must have a whitelist of allowed domains, see config/corsOptions
 app.use(cors(corsOptions))
+
+/* File uploads */
+const storage = multer.diskStorage({
+  destination: (req, res, cb) => {
+    cb(null, 'uploads')
+  },
+  filename: (req, file, cb) => {
+    // const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9)
+    const uniqueSuffix =
+      Date.now() + '-' + Math.round(Math.random() * 1e9) + '-' + file.originalname
+    //console.log(file)
+    cb(null, file.fieldname + '-' + uniqueSuffix)
+  }
+})
+const upload = multer({ storage: storage })
+
+app.post('/upload', upload.single('avatar'), (req, res) => {
+  const { image } = req.file
+  // If does not have image mime type prevent from uploading
+  // if (/^image/.test(image.mimetype)) return res.sendStatus(400)
+
+  res.status(201).json({ file: req.file })
+})
 
 /* Routes */
 app.use('/users', userRoutes)

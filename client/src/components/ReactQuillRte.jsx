@@ -24,7 +24,7 @@ const modules = {
     ['clean'],
     ['image']
   ],
-  //   'emoji-toolbar': true,
+  'emoji-toolbar': true,
   'emoji-textarea': true,
   'emoji-shortname': true,
   clipboard: {

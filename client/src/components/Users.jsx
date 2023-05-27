@@ -131,18 +131,19 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
     <>
       <div className="container">
         <div className="account-header">
-          <img src="assets/paul.jpg" alt="Avatar" className="avatar" />
-          <div>
-            {/* Display User */}
-            {users.map(
-              user =>
-                user._id === userId && (
+          {/* Display User */}
+          {users.map(
+            user =>
+              user._id === userId && (
+                <>
+                  <img src={user.avatar} alt="Avatar" className="avatar" />
+
                   <div key={user._id} className="chatroom">
                     <h3>{user.name}</h3>
                   </div>
-                )
-            )}
-          </div>
+                </>
+              )
+          )}
         </div>
 
         <div className="header">Contacts</div>
@@ -154,7 +155,7 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
               user._id !== userId && (
                 <div key={user._id} className="list-item-container">
                   <div>
-                    <img src="assets/joe.jpg" alt="Avatar" className="avatar" />
+                    <img src={user.avatar} alt="Avatar" className="avatar" />
                   </div>
 
                   <div className="list-item" onClick={() => joinPrivateChatRoom(user._id, userId)}>

@@ -175,8 +175,13 @@
 
 .react-quill {
   /* border: 1px dashed green; */
-  min-width: 800px;
-  max-width: 800px;
+  /* min-width: 200px; */
+  /* /* width: 100%; */
   height: 100px;
   /* overflow-y: scroll; */
+}
+
+.react-quill-container {
+  width: 100%;
+  height: 100px;
 }

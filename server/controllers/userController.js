@@ -6,7 +6,7 @@ import User from '../models/User.js'
 export const register = async (req, res) => {
   try {
     // get the user information from the form using req.body
-    const { name, email, password } = req.body
+    const { name, email, password, avatar } = req.body
 
     // check if the email already exists
     const emailExists = await User.findOne({ email })
@@ -24,7 +24,8 @@ export const register = async (req, res) => {
     const newUser = new User({
       name,
       email,
-      password: passwordHash
+      password: passwordHash,
+      avatar
     })
     // save new user
     await newUser.save()

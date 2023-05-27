@@ -108,9 +108,6 @@ const Chatrooms = ({ socket, setChatRoomId, setIsMessageBoxGroupOpen }) => {
           {/* Display chatrooms */}
           {chatrooms.map(chatroom => (
             <div className="list-item-container" key={chatroom._id}>
-              <div>
-                <img src="assets/jazz.png" alt="Avatar" className="avatar" />
-              </div>
               <div className="list-item" onClick={() => joinChatRoom(chatroom._id)}>
                 {chatroom.name}
               </div>

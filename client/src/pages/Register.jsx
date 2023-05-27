@@ -1,14 +1,24 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import axios from 'axios'
 import makeToast from '../Toaster'
 import { useNavigate } from 'react-router-dom'
 
 const RegisterPage = () => {
+  const [avatar, setAvatar] = useState()
+  const [isFilePicked, setIsFilePicked] = useState(false)
+
   const nameRef = useRef()
   const emailRef = useRef()
   const passwordRef = useRef()
+  //const avatarRef = useRef()
 
   const navigate = useNavigate()
+
+  const fileUploadHandler = event => {
+    setAvatar(event.target.files[0])
+    setIsFilePicked(true)
+    console.log(event.target.files)
+  }
 
   const registerUser = async event => {
     event.preventDefault()
@@ -16,12 +26,26 @@ const RegisterPage = () => {
     const name = nameRef.current.value
     const email = emailRef.current.value
     const password = passwordRef.current.value
+    //const avatar = avatarRef.current.value
 
-    await axios
+    // upload avatar to get path
+    const formData = new FormData()
+    formData.append('avatar', avatar)
+
+    const uploadedFile = await axios
+      .post('http://localhost:8000/upload', formData)
+      .then(response => response.data)
+      .catch(error => {
+        makeToast('error', error.message)
+      })
+
+    // Register user in the database
+    axios
       .post('http://localhost:8000/users/register', {
         name,
         email,
-        password
+        password,
+        avatar: `http://localhost:8000/${uploadedFile.file.destination}/${uploadedFile.file.filename}`
       })
       .then(response => {
         console.log(response.data)
@@ -38,7 +62,7 @@ const RegisterPage = () => {
     <div className="form-outer-container">
       <div className="form-container">
         <div className="form-header">FrankensChat</div>
-        <form>
+        <form encType="multipart/form-data">
           <div className="form-row">
             <label htmlFor="name" className="form-item-label">
               Name
@@ -73,6 +97,19 @@ const RegisterPage = () => {
               name="password"
               id="password"
               ref={passwordRef}
+            />
+          </div>
+          <div className="form-row">
+            <label htmlFor="avatar" className="form-item-label">
+              Avatar
+            </label>
+            <input
+              className="form-item form-input"
+              type="file"
+              name="avatar"
+              id="avatar"
+              onChange={fileUploadHandler}
+              // ref={avatarRef}
             />
           </div>
           <div className="form-row form-button">

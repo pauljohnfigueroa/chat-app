@@ -136,16 +136,6 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
 
         <div className="message-box-actions">
           <div className="react-quill-container">
-            {/* <ReactQuill
-              className="react-quill"
-              theme="snow"
-              modules={modules}
-              // formats={formats}
-              value={quillValue}
-              ref={messageRef}
-              onChange={rteChange}
-              placeholder="Compose a message"
-            /> */}
             <ReactQuillRte
               setQuillValue={setQuillValue}
               quillValue={quillValue}

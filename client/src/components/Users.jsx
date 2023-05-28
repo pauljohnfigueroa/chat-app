@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 // import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
+const Users = ({ socket, isMessageBoxOpen, setIsMessageBoxOpen, setChatRoomId }) => {
   const [users, setUsers] = useState([])
   const [userId, setUserId] = useState('')
   const [onlineUsers, setOnlineUsers] = useState([])
@@ -10,6 +10,13 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
   const [messageNotifications, setMessageNotifications] = useState([])
 
   const joinPrivateChatRoom = async (roomId, userId) => {
+    // check for notifications
+    const unread = messageNotifications.filter(item => item.room !== roomId)
+    console.log('unread', unread)
+    if (unread) {
+      setMessageNotifications(unread)
+    }
+
     const chatroom = await axios
       .post(
         'http://localhost:8000/chat',
@@ -135,12 +142,17 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
   useEffect(() => {
     if (socket) {
       socket.on('private-message-notification', ({ to, from, message, room }) => {
-        console.log('private-message-notification')
-        setMessageNotifications([...messageNotifications, { to, from, message, room }])
+        // console.log('private-message-notification')
+        // only put notifications when the chat window is not open
+        if (!isMessageBoxOpen) {
+          console.log('isMessageBoxOpen is not open')
+          setMessageNotifications([...messageNotifications, { to, from, message, room }])
+          console.log(messageNotifications)
+        }
       })
     }
-    console.log('messageNotifications', messageNotifications)
-  }, [socket, messageNotifications, setMessageNotifications])
+    //console.log('messageNotifications', messageNotifications)
+  }, [socket, isMessageBoxOpen, messageNotifications, setMessageNotifications])
 
   // if (messageNotifications.length > 0) {
   //   var note = messageNotifications.filter(obj => obj.from === '64721cf6373b8594eb99fd82')
@@ -171,12 +183,12 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
         <div className="list-group">
           {/* Display Users */}
           {users.map(user => {
-            if (messageNotifications.length > 0) {
-              var note = messageNotifications.filter(obj => obj.from === user._id)
-              // console.log('noteObject', note[0]?.from)
-              // console.log('noteObject', note[0]?.from === user._id)
-              //console.log('user._id', user._id)
-            }
+            // if (messageNotifications.length > 0) {
+            //   //var note = messageNotifications.filter(obj => obj.from === user._id)
+            //   // console.log('noteObject', note[0]?.from)
+            //   // console.log('noteObject', note[0]?.from === user._id)
+            //   //console.log('user._id', user._id)
+            // }
 
             return (
               user._id !== userId && (

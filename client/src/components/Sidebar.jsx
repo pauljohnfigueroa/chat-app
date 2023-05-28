@@ -8,6 +8,7 @@ const Sidebar = ({
   chatRoomId,
   setChatRoomId,
   setMessages,
+  isMessageBoxOpen,
   setIsMessageBoxOpen,
   setIsMessageBoxGroupOpen,
   socket
@@ -67,6 +68,7 @@ const Sidebar = ({
       <Users
         socket={socket}
         setChatRoomId={setChatRoomId}
+        isMessageBoxOpen={isMessageBoxOpen}
         setIsMessageBoxOpen={setIsMessageBoxOpen}
         setMessages={setMessages}
       />

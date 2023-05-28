@@ -29,6 +29,7 @@ const DashboardPage = ({ socket, setMessages }) => {
             setChatRoomId={setChatRoomId}
             setMessages={setMessages}
             setIsMessageBoxOpen={setIsMessageBoxOpen}
+            isMessageBoxOpen={isMessageBoxOpen}
             setIsMessageBoxGroupOpen={setIsMessageBoxGroupOpen}
             socket={socket}
           />

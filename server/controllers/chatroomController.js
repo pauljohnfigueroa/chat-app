@@ -16,7 +16,6 @@ export const createChatRoom = async (req, res) => {
       name,
       isGroupChat: true
     })
-
     const savedChatroom = await chatroom.save()
 
     res.status(201).json({ message: `${name} room was successfully created.` })
@@ -33,6 +32,5 @@ export const getAllChatrooms = async (req, res) => {
 export const getChatRoom = async (req, res) => {
   const { chatRoomId } = req.params
   const chatroom = await ChatRoom.find({ _id: new ObjectId(chatRoomId) })
-  //console.log('chatroom', chatroom)
   res.status(201).json(chatroom)
 }

@@ -15,9 +15,8 @@ export const register = async (req, res) => {
       return
     }
 
-    // password salt
+    // password salt and hash
     const salt = await bcrypt.genSalt()
-    // password hash
     const passwordHash = await bcrypt.hash(password, salt)
 
     // new User()
@@ -41,19 +40,14 @@ export const login = async (req, res) => {
   try {
     // get the login parameters
     const { email, password } = req.body
-
     // check if the email exists in the database
     const user = await User.findOne({ email })
-
     // return error if the email does not exists
     if (!user) return res.status(400).json({ message: 'Invalid Email or Password.' })
-
     // If the email exists, check the password
     const isPwdMatch = await bcrypt.compare(password, user.password)
     // If password does not match
     if (!isPwdMatch) return res.status(400).json({ message: 'Invalid Email or Password.' })
-
-    // if everything is OK
     // do not send the password to the front end
     user.password = undefined
 

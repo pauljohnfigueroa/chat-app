@@ -191,13 +191,13 @@ const Users = ({
           {users.map(
             user =>
               user._id === userId && (
-                <>
+                <div key={user._id}>
                   <img src={user.avatar} alt="Avatar" className="avatar" />
 
                   <div key={user._id} className="chatroom">
                     <h3>{user.name}</h3>
                   </div>
-                </>
+                </div>
               )
           )}
         </div>

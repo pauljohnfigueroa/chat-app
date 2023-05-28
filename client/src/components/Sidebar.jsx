@@ -8,7 +8,7 @@ const Sidebar = ({
   chatRoomId,
   setChatRoomId,
   isMessageBoxOpen,
-  setMessages,
+  // setMessages,
   setMessageNotifications,
   messageNotifications,
   setIsMessageBoxOpen,
@@ -31,7 +31,7 @@ const Sidebar = ({
       myId = payload
     }
 
-    // use this in handle log out
+    // use this to handle log out
     if (socket) {
       socket.emit('leave-room', chatRoomId)
       // Inform other that you are going offline
@@ -40,7 +40,6 @@ const Sidebar = ({
       })
 
       // Set isOnline to false in users collection
-      // const setUserOffline = async () => {
       await axios
         .post(
           `http://localhost:8000/users/offline`,

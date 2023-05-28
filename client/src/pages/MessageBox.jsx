@@ -138,7 +138,6 @@ const Chat = ({
             Leave
           </button>
         </div>
-
         <div className="message-box-content">
           {messages.map((message, idx) => (
             <div
@@ -166,7 +165,6 @@ const Chat = ({
           {/* show the latest message */}
           <div ref={messageEndRef} />
         </div>
-
         <div className="message-box-actions">
           <div className="react-quill-container">
             <ReactQuillRte

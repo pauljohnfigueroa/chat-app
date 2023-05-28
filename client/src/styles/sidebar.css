@@ -81,6 +81,13 @@
   width: 20%;
   color: #888;
 }
+.message-notif-indicator-off {
+  color: #888;
+}
+
+.message-notif-indicator-on {
+  color: #48ff00;
+}
 
 .logout-button-container {
   width: 100%;

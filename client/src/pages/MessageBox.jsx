@@ -3,7 +3,6 @@ import axios from 'axios'
 import makeToast from '../Toaster'
 
 import parse from 'html-react-parser'
-
 import ReactQuillRte from '../components/ReactQuillRte'
 
 const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
@@ -19,7 +18,8 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
     if (socket) {
       socket.emit('private-message', {
         message: quillValue,
-        to: chatRoomId
+        to: chatRoomId,
+        from: userId
       })
       // clear the message input
       setQuillValue('')

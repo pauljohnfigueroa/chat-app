@@ -3,7 +3,6 @@ import axios from 'axios'
 import makeToast from '../Toaster'
 
 import parse from 'html-react-parser'
-
 import ReactQuillRte from '../components/ReactQuillRte'
 
 const ChatGroup = ({ socket, chatRoomId, setIsMessageBoxGroupOpen }) => {
@@ -124,7 +123,7 @@ const ChatGroup = ({ socket, chatRoomId, setIsMessageBoxGroupOpen }) => {
               </div>
             </div>
           ))}
-          {/* show the latest message */}
+          {/* scroll to the latest message */}
           <div ref={messageEndRef} />
         </div>
         <div className="message-box-actions">

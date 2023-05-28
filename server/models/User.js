@@ -17,7 +17,13 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: String
     },
-    isOnline: { type: Boolean, default: false }
+    isOnline: { type: Boolean, default: false },
+    opennedChat: {
+      type: Array
+    },
+    messageNotifications: {
+      type: Array
+    }
   },
   {
     timestamps: true

@@ -38,7 +38,7 @@ export const getChatName = async (req, res) => {
 
 export const createChat = async (req, res) => {
   try {
-    const { name, users } = req.body
+    const { name, users, userId } = req.body
     // check if the email already exists
     const chatroomExists = await ChatRoom.findOne({
       name: { $in: users },
@@ -55,8 +55,22 @@ export const createChat = async (req, res) => {
       isGroupChat: false
     })
     const savedChatroom = await chatroom.save()
+    console.log('savedChatroom', savedChatroom)
+
+    const user = await User.findOneAndUpdate({ _id: userId }, { opennedChat: savedChatroom._id })
 
     return res.status(201).json(savedChatroom)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+export const opennedChat = async (req, res) => {
+  try {
+    const { userId, opennedChat } = req.body
+    // check if the email already exists
+    const user = await User.findOneAndUpdate({ _id: userId }, { opennedChat })
+    return res.status(201).json(user)
   } catch (error) {
     res.status(500).json({ message: error.message })
   }

@@ -9,8 +9,10 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { Server } from 'socket.io'
 
+/* Models */
 import User from './models/User.js'
 import Message from './models/Message.js'
+import ChatRoom from './models/ChatRoom.js'
 
 dotenv.config()
 const app = express()
@@ -77,6 +79,7 @@ import {
   developmentErrors,
   productionErrors
 } from './handlers/errorHandlers.js'
+
 app.use(notFound)
 app.use(mongooseErrors)
 
@@ -208,7 +211,7 @@ io.on('connection', socket => {
   })
 
   /* Private message */
-  socket.on('private-message', async ({ message, to }) => {
+  socket.on('private-message', async ({ message, to, from }) => {
     // do not process a black message
     if (message.trim().length > 0) {
       const user = await User.findOne({ _id: socket.userId })
@@ -217,8 +220,28 @@ io.on('connection', socket => {
         user: socket.userId,
         message
       })
-      // save the new message to database
+
+      // save the new message to messages collection
       await newMessage.save()
+
+      // get the otherUser's _id
+      const chatroom = await ChatRoom.find({ _id: to })
+      console.log('chatroom', chatroom[0].users)
+
+      const otherUserId = chatroom[0].users.filter(id => id !== from)
+
+      // // Check if the chatroom is open from the other user.
+      const otherUser = await User.find({ _id: otherUserId })
+      console.log('otherUser', otherUser)
+
+      // if chatroom is not openned, send notification
+      // if (!chatroom.opennedChat) {
+      //   io.to(to).emit('private-message-notification', {
+      //     message,
+      //     // name: user.name,
+      //     room: socket.userId
+      //   })
+      // }
 
       // io. broadcast including sender
       // socket. broadcast not including sender

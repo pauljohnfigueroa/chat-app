@@ -1,11 +1,11 @@
 import { useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import makeToast from '../Toaster'
-import { useNavigate } from 'react-router-dom'
 
 const RegisterPage = () => {
   const [avatar, setAvatar] = useState()
-  const [isFilePicked, setIsFilePicked] = useState(false)
+  // const [isFilePicked, setIsFilePicked] = useState(false)
 
   const nameRef = useRef()
   const emailRef = useRef()
@@ -16,8 +16,8 @@ const RegisterPage = () => {
 
   const fileUploadHandler = event => {
     setAvatar(event.target.files[0])
-    setIsFilePicked(true)
-    console.log(event.target.files)
+    // setIsFilePicked(true)
+    // console.log(event.target.files)
   }
 
   const registerUser = async event => {

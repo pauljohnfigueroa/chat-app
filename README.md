@@ -49,3 +49,4 @@ LIMITATIONS AND KNOWN BUGS FOR THIS VERSION
 3. The rich text chat composer emojis window from the toolbar overflows.
 4. There's a possibility of cross-talking between rooms when the user opens a new chat window without leaving the previous window.
 5. Related to #4, the user needs to click the Leave room button before joining another new chat.
+6. Offline messages are not saved in the database.

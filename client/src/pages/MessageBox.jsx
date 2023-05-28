@@ -5,7 +5,13 @@ import makeToast from '../Toaster'
 import parse from 'html-react-parser'
 import ReactQuillRte from '../components/ReactQuillRte'
 
-const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
+const Chat = ({
+  socket,
+  chatRoomId,
+  setIsMessageBoxOpen,
+  setMessageNotifications,
+  messageNotifications
+}) => {
   const [messages, setMessages] = useState([])
   const [chatName, setChatName] = useState('')
   const [userId, setUserId] = useState('')
@@ -27,6 +33,13 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
   }
 
   const handleLeaveRoom = () => {
+    // check for notifications
+    const unread = messageNotifications.filter(item => item.room !== chatRoomId)
+    console.log('Message box unread', unread)
+    if (unread) {
+      setMessageNotifications(unread)
+    }
+
     setIsMessageBoxOpen(false)
 
     // use this in handle log out
@@ -34,6 +47,26 @@ const Chat = ({ socket, chatRoomId, setIsMessageBoxOpen }) => {
       // Notify others that you are going offline
       socket.emit('leave-room', chatRoomId)
     }
+
+    axios
+      .post(
+        'http://localhost:8000/users/closechat',
+        {
+          chatRoomId,
+          userId
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
+          }
+        }
+      )
+      .then(response => {
+        return response.data
+      })
+      .catch(error => {
+        console.log(error.message)
+      })
   }
 
   useEffect(() => {

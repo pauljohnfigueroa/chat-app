@@ -247,9 +247,7 @@ io.on('connection', socket => {
       if (!otherUser[0].opennedChat.length > 0) {
         //socket.join(otherUser[0]._id)
         socket.join(otherUser[0]._id.toString())
-
         console.log('IF otherUser[0].opennedChat', otherUser[0].opennedChat)
-
         socket.to(otherUser[0]._id.toString()).emit('private-message-notification', {
           to: otherUser[0]._id.toString(), // receiving user
           from, // sending user

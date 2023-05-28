@@ -9,6 +9,8 @@ const DashboardPage = ({ socket, setMessages }) => {
   const [isMessageBoxOpen, setIsMessageBoxOpen] = useState(false)
   const [isMessageBoxGroupOpen, setIsMessageBoxGroupOpen] = useState(false)
   const [chatRoomId, setChatRoomId] = useState(null)
+  const [messageNotifications, setMessageNotifications] = useState([])
+
   const navigate = useNavigate()
 
   // Repeated code, put in a separate auth method
@@ -28,6 +30,8 @@ const DashboardPage = ({ socket, setMessages }) => {
             chatRoomId={chatRoomId}
             setChatRoomId={setChatRoomId}
             setMessages={setMessages}
+            setMessageNotifications={setMessageNotifications}
+            messageNotifications={messageNotifications}
             setIsMessageBoxOpen={setIsMessageBoxOpen}
             isMessageBoxOpen={isMessageBoxOpen}
             setIsMessageBoxGroupOpen={setIsMessageBoxGroupOpen}
@@ -38,6 +42,8 @@ const DashboardPage = ({ socket, setMessages }) => {
           <Outlet />
           {isMessageBoxOpen && (
             <MessageBox
+              setMessageNotifications={setMessageNotifications}
+              messageNotifications={messageNotifications}
               setIsMessageBoxOpen={setIsMessageBoxOpen}
               chatRoomId={chatRoomId}
               socket={socket}
@@ -45,6 +51,8 @@ const DashboardPage = ({ socket, setMessages }) => {
           )}
           {isMessageBoxGroupOpen && (
             <MessageBoxGroup
+              setMessageNotifications={setMessageNotifications}
+              messageNotifications={messageNotifications}
               setIsMessageBoxGroupOpen={setIsMessageBoxGroupOpen}
               chatRoomId={chatRoomId}
               socket={socket}

@@ -7,8 +7,10 @@ import { useNavigate } from 'react-router-dom'
 const Sidebar = ({
   chatRoomId,
   setChatRoomId,
-  setMessages,
   isMessageBoxOpen,
+  setMessages,
+  setMessageNotifications,
+  messageNotifications,
   setIsMessageBoxOpen,
   setIsMessageBoxGroupOpen,
   socket
@@ -68,9 +70,10 @@ const Sidebar = ({
       <Users
         socket={socket}
         setChatRoomId={setChatRoomId}
+        setMessageNotifications={setMessageNotifications}
+        messageNotifications={messageNotifications}
         isMessageBoxOpen={isMessageBoxOpen}
         setIsMessageBoxOpen={setIsMessageBoxOpen}
-        setMessages={setMessages}
       />
       {/* Chat rooms */}
       <Chatrooms

@@ -99,3 +99,23 @@ export const setUserOffline = async (req, res) => {
     res.status(500).json({ message: error.message })
   }
 }
+
+export const setOpennedChat = async (req, res) => {
+  const { roomId, userId } = req.body
+  try {
+    const user = await User.findOneAndUpdate({ _id: userId }, { $set: { opennedChat: roomId } })
+    res.status(201).json(user)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+export const setCloseChat = async (req, res) => {
+  const { roomId, userId } = req.body
+  try {
+    const user = await User.findOneAndUpdate({ _id: userId }, { $set: { opennedChat: [] } })
+    res.status(201).json(user)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}

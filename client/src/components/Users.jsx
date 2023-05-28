@@ -2,12 +2,19 @@ import { useEffect, useState } from 'react'
 // import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-const Users = ({ socket, isMessageBoxOpen, setIsMessageBoxOpen, setChatRoomId }) => {
+const Users = ({
+  socket,
+  isMessageBoxOpen,
+  setIsMessageBoxOpen,
+  messageNotifications,
+  setMessageNotifications,
+  setChatRoomId
+}) => {
   const [users, setUsers] = useState([])
   const [userId, setUserId] = useState('')
   const [onlineUsers, setOnlineUsers] = useState([])
   // const [opennedChat, setOpennedChat] = useState([])
-  const [messageNotifications, setMessageNotifications] = useState([])
+  // const [messageNotifications, setMessageNotifications] = useState([])
 
   const joinPrivateChatRoom = async (roomId, userId) => {
     // check for notifications
@@ -42,6 +49,27 @@ const Users = ({ socket, isMessageBoxOpen, setIsMessageBoxOpen, setChatRoomId })
     if (socket) {
       socket.emit('open-private-chat', chatroom._id)
     }
+
+    // update User.opennedChat
+    axios
+      .post(
+        'http://localhost:8000/users/openchat',
+        {
+          roomId,
+          userId
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
+          }
+        }
+      )
+      .then(response => {
+        return response.data
+      })
+      .catch(error => {
+        console.log(error.message)
+      })
 
     // Open message box
     await axios
@@ -146,18 +174,14 @@ const Users = ({ socket, isMessageBoxOpen, setIsMessageBoxOpen, setChatRoomId })
         // only put notifications when the chat window is not open
         if (!isMessageBoxOpen) {
           console.log('isMessageBoxOpen is not open')
+
           setMessageNotifications([...messageNotifications, { to, from, message, room }])
-          console.log(messageNotifications)
+          console.log('messageNotifications', messageNotifications)
         }
       })
     }
-    //console.log('messageNotifications', messageNotifications)
+    console.log('messageNotifications', messageNotifications)
   }, [socket, isMessageBoxOpen, messageNotifications, setMessageNotifications])
-
-  // if (messageNotifications.length > 0) {
-  //   var note = messageNotifications.filter(obj => obj.from === '64721cf6373b8594eb99fd82')
-  //   console.log('noteObject', note[0].from)
-  // }
 
   return (
     <>

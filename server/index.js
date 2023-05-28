@@ -16,6 +16,7 @@ import ChatRoom from './models/ChatRoom.js'
 
 dotenv.config()
 const app = express()
+const ObjectId = mongoose.Types.ObjectId
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -134,6 +135,10 @@ io.on('connection', socket => {
   // socket.userId is from the token
   console.log(`io.on('connection') - Connected: ${socket.userId}`)
 
+  // join to my own room
+  console.log('socket.userId', socket.userId)
+  socket.join(socket.userId)
+
   socket.on('disconnect', async () => {
     console.log(`socket.on('disconnect') - Disconnected: ${socket.userId}`)
     // User log's out
@@ -205,13 +210,17 @@ io.on('connection', socket => {
   })
 
   /* Private Chat */
-  socket.on('private-chat', chatRoomId => {
+  // a user clicked on another user's name joining a private room as a result
+  socket.on('open-private-chat', chatRoomId => {
     socket.join(chatRoomId)
-    console.log(`A user joined a private-chat (event: 'private-chat') ${chatRoomId}`)
+    console.log(`A user joined a open-private-chat (event: 'open-private-chat') ${chatRoomId}`)
   })
 
   /* Private message */
+  // A user send's a message to their private room using the message box
   socket.on('private-message', async ({ message, to, from }) => {
+    // to = room
+    // from = message sender
     // do not process a black message
     if (message.trim().length > 0) {
       const user = await User.findOne({ _id: socket.userId })
@@ -220,28 +229,36 @@ io.on('connection', socket => {
         user: socket.userId,
         message
       })
-
       // save the new message to messages collection
       await newMessage.save()
 
       // get the otherUser's _id
       const chatroom = await ChatRoom.find({ _id: to })
-      console.log('chatroom', chatroom[0].users)
+      //console.log('chatroom', chatroom[0].users)
 
-      const otherUserId = chatroom[0].users.filter(id => id !== from)
+      const otherUserId = chatroom[0].users.filter(id => !new ObjectId(from).equals(id))
+      //console.log('otherUserId', otherUserId)
 
       // // Check if the chatroom is open from the other user.
       const otherUser = await User.find({ _id: otherUserId })
-      console.log('otherUser', otherUser)
+      console.log('otherUser._id', otherUser[0]._id)
 
-      // if chatroom is not openned, send notification
-      // if (!chatroom.opennedChat) {
-      //   io.to(to).emit('private-message-notification', {
-      //     message,
-      //     // name: user.name,
-      //     room: socket.userId
-      //   })
-      // }
+      //if chatroom is not openned, send notification
+      if (!otherUser[0].opennedChat.length > 0) {
+        //socket.join(otherUser[0]._id)
+        socket.join(otherUser[0]._id.toString())
+
+        console.log('IF otherUser[0].opennedChat', otherUser[0].opennedChat)
+
+        socket.to(otherUser[0]._id.toString()).emit('private-message-notification', {
+          to: otherUser[0]._id.toString(), // receiving user
+          from, // sending user
+          message,
+          room: socket.userId
+        })
+
+        socket.leave(otherUser[0]._id.toString())
+      }
 
       // io. broadcast including sender
       // socket. broadcast not including sender

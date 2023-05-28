@@ -6,11 +6,11 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
   const [users, setUsers] = useState([])
   const [userId, setUserId] = useState('')
   const [onlineUsers, setOnlineUsers] = useState([])
-  const [opennedChat, setOpennedChat] = useState([])
+  // const [opennedChat, setOpennedChat] = useState([])
   const [messageNotifications, setMessageNotifications] = useState([])
 
   const joinPrivateChatRoom = async (roomId, userId) => {
-    const resp = await axios
+    const chatroom = await axios
       .post(
         'http://localhost:8000/chat',
         {
@@ -33,34 +33,12 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
       })
 
     if (socket) {
-      socket.emit('private-chat', resp._id)
+      socket.emit('open-private-chat', chatroom._id)
     }
-
-    // update opennedChat
-    // const opennedChat = await axios
-    //   .post(
-    //     'http://localhost:8000/chat/openned',
-    //     {
-    //       userId,
-    //       opennedChat: [roomId]
-    //     },
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
-    //       }
-    //     }
-    //   )
-    //   .then(response => {
-    //     setOpennedChat(roomId)
-    //     //return response.data
-    //   })
-    //   .catch(error => {
-    //     console.log(error.message)
-    //   })
 
     // Open message box
     await axios
-      .get(`http://localhost:8000/chat/${roomId}/${userId}/${resp._id}`, {
+      .get(`http://localhost:8000/chat/${roomId}/${userId}/${chatroom._id}`, {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem('chatapp_token')}`
         }
@@ -102,7 +80,7 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
   }, [])
 
   useEffect(() => {
-    console.log('useEffect()')
+    console.log('on login, notify others if online/offline')
     // on login, notify others if online/offline
     if (socket) {
       socket.emit('online-status', {
@@ -155,10 +133,19 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
 
   // Message notifications
   useEffect(() => {
-    socket.on('private-message-notification', (message, room) => {
-      setMessageNotifications([...messageNotifications, { room, message }])
-    })
-  }, [socket, messageNotifications])
+    if (socket) {
+      socket.on('private-message-notification', ({ to, from, message, room }) => {
+        console.log('private-message-notification')
+        setMessageNotifications([...messageNotifications, { to, from, message, room }])
+      })
+    }
+    console.log('messageNotifications', messageNotifications)
+  }, [socket, messageNotifications, setMessageNotifications])
+
+  // if (messageNotifications.length > 0) {
+  //   var note = messageNotifications.filter(obj => obj.from === '64721cf6373b8594eb99fd82')
+  //   console.log('noteObject', note[0].from)
+  // }
 
   return (
     <>
@@ -183,8 +170,15 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
 
         <div className="list-group">
           {/* Display Users */}
-          {users.map(
-            user =>
+          {users.map(user => {
+            if (messageNotifications.length > 0) {
+              var note = messageNotifications.filter(obj => obj.from === user._id)
+              // console.log('noteObject', note[0]?.from)
+              // console.log('noteObject', note[0]?.from === user._id)
+              //console.log('user._id', user._id)
+            }
+
+            return (
               user._id !== userId && (
                 <div key={user._id} className="list-item-container">
                   <div>
@@ -194,10 +188,13 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
                   <div className="list-item" onClick={() => joinPrivateChatRoom(user._id, userId)}>
                     {user.name}
                   </div>
-                  <div className="message-notif-indicator">&#128490;</div>
+                  {/* <div className="message-notif-indicator">&#128490;</div> */}
                   <div
                     className={
-                      messageNotifications
+                      // messageNotifications.length > 0 && messageNotifications[0].from === user._id
+                      messageNotifications.length > 0 &&
+                      messageNotifications.filter(obj => obj.from === user._id)[0]?.from ===
+                        user._id
                         ? 'message-notif-indicator message-notif-indicator-on'
                         : 'message-notif-indicator message-notif-indicator-off'
                     }
@@ -215,7 +212,8 @@ const Users = ({ socket, setIsMessageBoxOpen, setChatRoomId }) => {
                   </div>
                 </div>
               )
-          )}
+            )
+          })}
         </div>
       </div>
     </>

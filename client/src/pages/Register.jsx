@@ -5,19 +5,15 @@ import makeToast from '../Toaster'
 
 const RegisterPage = () => {
   const [avatar, setAvatar] = useState()
-  // const [isFilePicked, setIsFilePicked] = useState(false)
 
   const nameRef = useRef()
   const emailRef = useRef()
   const passwordRef = useRef()
-  //const avatarRef = useRef()
 
   const navigate = useNavigate()
 
   const fileUploadHandler = event => {
     setAvatar(event.target.files[0])
-    // setIsFilePicked(true)
-    // console.log(event.target.files)
   }
 
   const registerUser = async event => {
@@ -26,7 +22,6 @@ const RegisterPage = () => {
     const name = nameRef.current.value
     const email = emailRef.current.value
     const password = passwordRef.current.value
-    // const avatar = avatarRef.current.value
 
     // upload avatar
     const formData = new FormData()
@@ -61,8 +56,8 @@ const RegisterPage = () => {
   }
 
   return (
-    <div className="form-outer-container">
-      <div className="form-container">
+    <div className="form-outer-container ">
+      <div className="form-container form-container-register">
         <div className="form-header">FrankensChat</div>
         <form encType="multipart/form-data">
           <div className="form-row">
@@ -111,7 +106,6 @@ const RegisterPage = () => {
               name="avatar"
               id="avatar"
               onChange={fileUploadHandler}
-              // ref={avatarRef}
             />
           </div>
           <div className="form-row form-button">

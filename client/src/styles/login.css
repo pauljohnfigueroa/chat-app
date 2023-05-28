@@ -20,6 +20,11 @@
   margin: auto;
 }
 
+.form-container-register {
+  height: 300px;
+  width: 400px;
+}
+
 .form-header {
   width: 100%;
   font-size: 2rem;
@@ -61,7 +66,7 @@
 }
 
 .register-link {
-  color: rgb(0, 247, 255);
+  color: rgb(245, 194, 255);
   font-size: 0.9rem;
   margin-top: 10px;
 }

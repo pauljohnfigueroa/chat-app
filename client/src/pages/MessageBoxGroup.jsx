@@ -127,11 +127,13 @@ const ChatGroup = ({ socket, chatRoomId, setIsMessageBoxGroupOpen }) => {
           <div ref={messageEndRef} />
         </div>
         <div className="message-box-actions">
-          <ReactQuillRte
-            setQuillValue={setQuillValue}
-            quillValue={quillValue}
-            messageRef={messageRef}
-          />
+          <div className="react-quill-container">
+            <ReactQuillRte
+              setQuillValue={setQuillValue}
+              quillValue={quillValue}
+              messageRef={messageRef}
+            />
+          </div>
           <button className="send-message-button" onClick={sendMessage}>
             Send
           </button>

@@ -186,15 +186,15 @@ const Users = ({
   return (
     <>
       <div className="container">
-        <div className="account-header">
+        <div>
           {/* Display User */}
           {users.map(
             user =>
               user._id === userId && (
-                <div key={user._id}>
+                <div key={user._id} className="account-header">
                   <img src={user.avatar} alt="Avatar" className="avatar" />
 
-                  <div key={user._id} className="chatroom">
+                  <div key={user._id} className="header">
                     <h3>{user.name}</h3>
                   </div>
                 </div>

@@ -1,18 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-
+* {
+  box-sizing: border-box;
+}
 body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
   font-family: Poppins, sans-serif;
 }
-
-/* input {
-  height: 25px;
-  border: none;
-  outline: none;
-  border-radius: 10px;
-} */
 
 input[type='text']:focus {
   background-color: rgb(254, 255, 211);
